@@ -1,0 +1,57 @@
+* , body{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+
+div{
+    /* border: solid 1px gray; */
+    box-sizing: border-box;
+}
+
+
+#header h1{
+    width: 60%;
+    margin: 25px auto;
+    text-align: center;
+}
+
+#header p{
+    width: 40%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+
+#holder{
+    display: flex;
+}
+
+#sources{
+    width: 20%;
+    height: 100vh;
+}
+
+#destinations{
+    width: 20%;
+    height: 100vh;
+}
+
+#sankey{
+    flex-grow: 1;
+    height: 100vh;
+}
+
+.search_inputs{
+    margin-top:5px;
+    width: 100%;
+}
+
+/* typehead css */
+#multiple-datasets .league-name {
+    margin: 0 20px 5px 20px;
+    padding: 3px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+/* end of typehead css */
