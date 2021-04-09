@@ -7,7 +7,9 @@ function getSuggestionList(data, keyname) {
 }
 
 function getMPsList(data){
-    return data.reduce(function(accumulator, currentValue){ return accumulator.concat(currentValue.mps)}, []).filter(distinct).sort()
+    return data.reduce(function(accumulator, currentValue){ 
+        return accumulator.concat(currentValue.mps)
+    }, []).filter(distinct).sort()
 }
 
 function filterBy(data, key, value){
