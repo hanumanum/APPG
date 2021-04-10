@@ -44,14 +44,23 @@ div{
 
 .search_inputs{
     margin-top:5px;
-    width: 100%;
+    width: 100% !important;
+}
+
+input{
+    border: solid 1px gray;
+    border-radius: 0;
+}
+
+input:focus{
+    border: solid 1px gray;
+    border-radius: 0;
+    outline:none;
 }
 
 /* typehead css */
-#multiple-datasets .league-name {
-    margin: 0 20px 5px 20px;
-    padding: 3px 0;
-    border-bottom: 1px solid #ccc;
+.twitter-typeahead{
+    width: 100%;
 }
 
 /* end of typehead css */

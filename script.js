@@ -1,9 +1,9 @@
 $(document).ready(function () {
     const dataURL = "data.json"
-    $.get(dataURL, initSankeyDiagram,"json");
+    $.get(dataURL, initSankeyDiagram, "json");
 
 
-    function initSankeyDiagram(data, textStatus, jqXHR){
+    function initSankeyDiagram(data, textStatus, jqXHR) {
         initSourceSelect(data)
         initDestinationsSelect(data)
 
@@ -15,15 +15,16 @@ $(document).ready(function () {
         */
     }
 
-    function initSourceSelect(data){
-        const companies =  getSuggestionList(data, "source")
-        
-        //console.log({companies})
+    function initSourceSelect(data) {
+        const companies = getSuggestionList(data, "source")
+        initTypeHead('#search_sources',onOptionSelected,{data:companies, title:"Company"})
     }
 
-    function initDestinationsSelect(data){
+    function initDestinationsSelect(data) {
         const appgs = getSuggestionList(data, "appg")
-        const mps =   getMPsList(data)
+        const mps = getMPsList(data)
+        initTypeHead('#search_destinations',onOptionSelected, {data:appgs, title:"APPG"},{data:mps, title:"MP"})
     }
+
 
 });
