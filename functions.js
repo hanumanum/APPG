@@ -37,17 +37,17 @@ function substringMatcher(strs) {
 
 function initTypeHead(selector, onOptionSelected, options1, options2 = null) {
 
-    function createConfig(options){
+    function createOptionsFonfig(options){
         return {
             name: options.title,
             source: substringMatcher(options.data),
             templates: {
                 header: '<h3>' + options.title + '</h3>'
             }
-        }  
+        }
     }
 
-    const opt1 = createConfig(options1);
+    const opt1 = createOptionsFonfig(options1);
     const conf = {
         highlight: true,
         minLength: 0,
@@ -55,7 +55,7 @@ function initTypeHead(selector, onOptionSelected, options1, options2 = null) {
     }
 
     if(options2){
-        const opt2 = createConfig(options2);
+        const opt2 = createOptionsFonfig(options2);
         $(selector).typeahead(conf,opt1, opt2);
     }
     else{
