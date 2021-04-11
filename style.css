@@ -50,6 +50,7 @@ div{
 input{
     border: solid 1px gray;
     border-radius: 0;
+    padding: 4px;
 }
 
 input:focus{
@@ -64,3 +65,15 @@ input:focus{
 }
 
 /* end of typehead css */
+
+/* sankey styles */
+.link {
+    fill: none;
+    stroke: #000;
+    stroke-opacity: .2;
+  }
+  .link:hover {
+    stroke-opacity: .5;
+  }
+/* end of sankey styles */
+  
