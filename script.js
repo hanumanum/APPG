@@ -3,8 +3,8 @@ const nodeWidth = 20
 const nodePadding = 10
 let data = {}
 const filterObject = {
-    source:"",
-    target:""
+    source:undefined,
+    target:undefined
 } 
 
 

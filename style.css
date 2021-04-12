@@ -1,66 +1,67 @@
-* , body{
-    margin:0;
-    padding:0;
+*,
+body {
+    margin    : 0;
+    padding   : 0;
     box-sizing: border-box;
 }
 
-div{
+div {
     /* border: solid 1px gray; */
     box-sizing: border-box;
 }
 
 
-#header h1{
-    width: 60%;
-    margin: 25px auto;
+#header h1 {
+    width     : 60%;
+    margin    : 25px auto;
     text-align: center;
 }
 
-#header p{
-    width: 40%;
-    margin: 20px auto;
+#header p {
+    width     : 40%;
+    margin    : 20px auto;
     text-align: center;
 }
 
 
-#holder{
+#holder {
     display: flex;
 }
 
-#sources{
-    width: 20%;
+#sources {
+    width : 20%;
     height: 100vh;
 }
 
-#destinations{
-    width: 20%;
+#destinations {
+    width : 20%;
     height: 100vh;
 }
 
-#sankey{
+#sankey {
     flex-grow: 1;
-    height: 100vh;
+    height   : 100vh;
 }
 
-.search_inputs{
-    margin-top:5px;
-    width: 100% !important;
+.search_inputs {
+    margin-top: 5px;
+    width     : 100% !important;
 }
 
-input{
-    border: solid 1px gray;
+input {
+    border       : solid 1px gray;
     border-radius: 0;
-    padding: 4px;
+    padding      : 4px;
 }
 
-input:focus{
-    border: solid 1px gray;
+input:focus {
+    border       : solid 1px gray;
     border-radius: 0;
-    outline:none;
+    outline      : none;
 }
 
 /* typehead css */
-.twitter-typeahead{
+.twitter-typeahead {
     width: 100%;
 }
 
@@ -68,12 +69,31 @@ input:focus{
 
 /* sankey styles */
 .link {
-    fill: none;
-    stroke: #000;
+    fill          : none;
+    stroke        : #000;
     stroke-opacity: .2;
-  }
-  .link:hover {
+    margin-bottom: 1px;
+}
+
+.link:hover {
     stroke-opacity: .5;
-  }
+}
+
+.tt-dataset h3{
+    padding:5px;
+}
+
+.tt-suggestion.tt-selectable{
+    cursor: pointer;
+    padding:3px 5px;
+    width:100%;
+}
+
+.tt-suggestion.tt-selectable:hover,.tt-suggestion.tt-selectable.tt-cursor {
+    background-color:darkslateblue;
+    color:white;
+    width:100%;
+}
+
+
 /* end of sankey styles */
-  
