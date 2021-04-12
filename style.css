@@ -79,6 +79,10 @@ input:focus {
     stroke-opacity: .5;
 }
 
+.tt-dataset{
+    background-color: white;
+}
+
 .tt-dataset h3{
     padding:5px;
 }
@@ -95,5 +99,12 @@ input:focus {
     width:100%;
 }
 
+#destinations_meta{
+    margin-top:10px;
+}
+
+#destinations_meta ul{
+    padding-left:20px;
+}
 
 /* end of sankey styles */
