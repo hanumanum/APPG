@@ -40,7 +40,9 @@ div {
 
 #sankey {
     flex-grow: 1;
-    height   : 100vh;
+    height  : 100vh;
+    text-align: center;
+    margin-top: 20px;
 }
 
 .search_inputs {
@@ -97,6 +99,12 @@ input:focus {
     background-color:darkslateblue;
     color:white;
     width:100%;
+}
+
+.selected_option:hover{
+    cursor: pointer;
+    background-color:darkslateblue;
+    color:white;
 }
 
 #destinations_meta{
