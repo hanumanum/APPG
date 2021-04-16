@@ -24,6 +24,7 @@ function filterByMP(data, name) {
     })
 }
 
+
 function filterByFilter(data, filter){
     if(filter.target==undefined && filter.year==undefined){
         return data;
@@ -46,7 +47,7 @@ function filterByFilter(data, filter){
     }
 
     const _data = data.filter(getFilterContition) 
-    console.log({filter}, {_data})
+    //console.log({filter}, {_data})
     return  _data;
 }
 
@@ -167,6 +168,7 @@ function initTypeHeadV2(selector, onOptionSelected, options1, options2, options3
         hint:true
     }
 
+
     const opt1 = createOptionsFonfig(options1);
     const opt2 = createOptionsFonfig(options2);
     const opt3 = createOptionsFonfig(options3);
@@ -174,6 +176,7 @@ function initTypeHeadV2(selector, onOptionSelected, options1, options2, options3
     $(selector).typeahead(conf, opt1, opt2, opt3);
     $(selector).bind("typeahead:select", onOptionSelected)
     $(selector).bind("keyup", onOptionCleared)
+
 }
 
 

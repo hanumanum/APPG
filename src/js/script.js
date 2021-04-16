@@ -11,6 +11,7 @@ $(document).ready(function () {
     $.get(dataURL, initSankeyDiagram, "json");
 
     function initSankeyDiagram(_data) {
+        data = _data
         checkData(_data)
         initDestinationsSelect(_data)
         showSankeyD3(_data, "#sankey", { nodeWidth, nodePadding })
