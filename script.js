@@ -1,4 +1,4 @@
-const dataURL = "/data/data.json"
+const dataURL = "data/data.json"
 const nodeWidth = 20 
 const nodePadding = 10
 let data = {}
