@@ -226,7 +226,7 @@ function showSankeyD3(data, containerSelector, conf) {
         return;
     }
 
-    const height = calcHeight(data, 1)
+    const height = calcHeight(data, 2)
     const width = $(containerSelector).width()
     const graph = formatForSankey(data)
 
