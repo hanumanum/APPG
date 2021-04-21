@@ -76,6 +76,17 @@ function checkData(data){
     if(same.length) throw new UserException('appg and source can`t be same', same);
 }
 
+function fixAPPandSoruce(data){
+    console.warn("DATA ERRORS FIXED, BUT YOU NEED TO CHECK DATA")
+
+    return data.map(function(d){
+        if(d.appg === d.source){
+            d.source+="_"
+        }
+        return d
+     })
+}
+
 
 function calcHeight(data, ratio){
     if(data.length < 30) return 650
