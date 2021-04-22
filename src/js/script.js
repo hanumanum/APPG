@@ -18,7 +18,10 @@ $(document).ready(function () {
         }
         checkData(_data)
         initDestinationsSelect(_data)
-        showSankeyD3(_data, "#sankey", { nodeWidth, nodePadding })
+        
+        const grantTotalsData = calcGrantTotals(data,"appg",5)
+        const _top = filterByTop(_data, grantTotalsData)
+        showSankeyD3(_top, "#sankey", { nodeWidth, nodePadding })
     }
 
     function initDestinationsSelect(data) {

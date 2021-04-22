@@ -25,31 +25,83 @@ function filterByMP(data, name) {
 }
 
 
-function filterByFilter(data, filter){
-    if(filter.target==undefined && filter.year==undefined){
+function filterByTop(data, topsArrayOfObjects){
+    const topsArray = topsArrayOfObjects.map(function(currentValue){
+        return Object.keys(currentValue)[0]
+    })
+    
+    function filterCondition(currentValue){
+        return topsArray.includes(currentValue.appg) 
+    }
+    
+    
+    return data.filter(filterCondition)
+}
+
+
+function filterByFilter(data, filter) {
+    if (filter.target == undefined && filter.year == undefined) {
         return data;
     }
 
-    function getFilterContition(v){
-        const defaultFilter =  (v.source == filter.source || v.source==filter.target ||  v.appg == filter.target || v.mps.includes(filter.target))
+    function getFilterContition(v) {
+        const defaultFilter = (v.source == filter.source || v.source == filter.target || v.appg == filter.target || v.mps.includes(filter.target))
         const yearFilter = (v.date == filter.year)
 
-        if(filter.year && filter.target==undefined){
-            return  yearFilter 
+        if (filter.year && filter.target == undefined) {
+            return yearFilter
         }
-        else if(filter.target  && filter.year==undefined){
+        else if (filter.target && filter.year == undefined) {
             return defaultFilter
         }
-        else{
-           return defaultFilter && yearFilter
+        else {
+            return defaultFilter && yearFilter
         }
-        
+
     }
 
-    const _data = data.filter(getFilterContition) 
-    //console.log({filter}, {_data})
-    return  _data;
+    const _data = data.filter(getFilterContition)
+    return _data;
 }
+
+function calcGrantTotals(data, field, topCount = 10) {
+    function calcGrants(accumulator, currentValue) {
+        //console.log(currentValue[field])
+
+        if (!(currentValue[field] in accumulator)) {
+            accumulator[currentValue[field]] = 0
+        }
+        accumulator[currentValue[field]] += currentValue['total']
+        return accumulator
+    }
+
+    function makeArrayFromObject (accumulator, currentValue) {
+        accumulator.push({[currentValue]:grantTotals[currentValue]})
+        return accumulator;
+    }
+
+    function sorter(a, b){
+        return b[Object.keys(b)[0]] - a[Object.keys(a)[0]]  
+    }
+
+    const grantTotals = data.reduce(calcGrants, {})
+    const grantTotalsOrdered = Object.keys(grantTotals)
+                                     .reduce(makeArrayFromObject, [])
+                                     .sort(sorter)
+                                     .splice(0,topCount)
+
+
+    return grantTotalsOrdered                           
+}
+
+/*
+function filterTops(data, number=10){
+    function sortByTotalField(a,b){
+        const aGrantTotal = 
+    }
+    
+    return data.sort(sortByTotalField)
+}*/
 
 function UserException(message, data) {
     this.message = message;
@@ -57,69 +109,71 @@ function UserException(message, data) {
     console.error(data)
 }
 
-function concatDistinct(arr1, arr2){
-    if(arr1==undefined){
+function concatDistinct(arr1, arr2) {
+    if (arr1 == undefined) {
         arr1 = []
     }
 
-    if(arr2==undefined){
+    if (arr2 == undefined) {
         arr2 = []
     }
-    return [...new Set([...arr1 ,...arr2])];
+    return [...new Set([...arr1, ...arr2])];
 }
 
-function checkData(data){
-    const same = data.filter(function(d){
+function checkData(data) {
+    const same = data.filter(function (d) {
         return d.appg === d.source
     })
 
-    if(same.length) throw new UserException('appg and source can`t be same', same);
+    if (same.length) throw new UserException('appg and source can`t be same', same);
 }
 
-function fixAPPandSoruce(data){
+function fixAPPandSoruce(data) {
     console.warn("DATA ERRORS FIXED, BUT YOU NEED TO CHECK DATA")
 
-    return data.map(function(d){
-        if(d.appg === d.source){
-            d.source+="_"
+    return data.map(function (d) {
+        if (d.appg === d.source) {
+            d.source += "_"
         }
         return d
-     })
+    })
 }
 
 
-function calcHeight(data, ratio){
-    if(data.length < 30) return 650
-    return data.reduce(function(accumulator, currentValue){
-        return accumulator+currentValue.total/data.length
-    },0)*ratio
-    
+function calcHeight(data, ratio) {
+    return 1200
+
+    if (data.length < 30) return 650
+    return data.reduce(function (accumulator, currentValue) {
+        return accumulator + currentValue.total / data.length
+    }, 0) * ratio
+
 }
 
-function formatForSankey(data){
+function formatForSankey(data) {
     const sankeyData = {
-         nodes:[]  //array of {name:value}
-        ,links:[]  //array of {source:value, target:value, value:value}
+        nodes: []  //array of {name:value}
+        , links: []  //array of {source:value, target:value, value:value}
     }
 
     const allNodes = getSuggestionList(data, "source").concat(getSuggestionList(data, "appg"))
-    sankeyData.nodes = allNodes.map(function(d,i){
+    sankeyData.nodes = allNodes.map(function (d, i) {
         return {
-            node:i,
-            name:d
+            node: i,
+            name: d
         }
     })
 
-    sankeyData.links = data.map(function(d){
+    sankeyData.links = data.map(function (d) {
         return {
-            source:allNodes.indexOf(d.source),
-            target:allNodes.indexOf(d.appg),
-            value:d.total,
-            date:d.date
+            source: allNodes.indexOf(d.source),
+            target: allNodes.indexOf(d.appg),
+            value: d.total,
+            date: d.date
         }
     })
 
-    sankeyData.links.sort(function(a,b){ return a.date - b.date})
+    sankeyData.links.sort(function (a, b) { return a.date - b.date })
 
 
     return sankeyData;
@@ -138,11 +192,11 @@ function substringMatcher(strs) {
 };
 
 
-function createOptionsFonfig(options){
+function createOptionsFonfig(options) {
     return {
         name: options.title,
         source: substringMatcher(options.data),
-        limit:options.data.length,
+        limit: options.data.length,
         templates: {
             header: '<h3>' + options.title + '</h3>'
         }
@@ -155,14 +209,14 @@ function initTypeHead(selector, onOptionSelected, options1, options2 = null) {
     const conf = {
         highlight: true,
         minLength: 0,
-        hint:true
+        hint: true
     }
 
-    if(options2){
+    if (options2) {
         const opt2 = createOptionsFonfig(options2);
         $(selector).typeahead(conf, opt1, opt2);
     }
-    else{
+    else {
         $(selector).typeahead(conf, opt1);
     }
 
@@ -176,7 +230,7 @@ function initTypeHeadV2(selector, onOptionSelected, options1, options2, options3
     const conf = {
         highlight: true,
         minLength: 0,
-        hint:true
+        hint: true
     }
 
 
@@ -191,29 +245,29 @@ function initTypeHeadV2(selector, onOptionSelected, options1, options2, options3
 }
 
 
-function distinctMetaInfo(data){
-    return data.reduce(function(accumulator,currentValue){
-        const first = accumulator[currentValue.appg] 
+function distinctMetaInfo(data) {
+    return data.reduce(function (accumulator, currentValue) {
+        const first = accumulator[currentValue.appg]
         const second = currentValue.mps
-        accumulator[currentValue.appg] = concatDistinct(first,second)
+        accumulator[currentValue.appg] = concatDistinct(first, second)
         return accumulator
-    },{})
+    }, {})
 }
 
 
-function showMetas(data, filterObject, onClick){
+function showMetas(data, filterObject, onClick) {
     $("#destinations_meta ul").empty()
     const distinctedData = distinctMetaInfo(data)
-    if(filterObject.source || filterObject.target){
-        Object.keys(distinctedData).map(function(d){
-            const mpsList =  "<ul><li class='selected_option'>"+distinctedData[d].join("</li><li class='selected_option'>") + "</li></ul>";
+    if (filterObject.source || filterObject.target) {
+        Object.keys(distinctedData).map(function (d) {
+            const mpsList = "<ul><li class='selected_option'>" + distinctedData[d].join("</li><li class='selected_option'>") + "</li></ul>";
             const mpGrUl = $("<li>").prepend(d).append(mpsList)
             $("#destinations_meta > ul").append(mpGrUl)
         })
     }
 
-    if(onClick){
-        $(".selected_option").on("click",onClick)
+    if (onClick) {
+        $(".selected_option").on("click", onClick)
     }
 
 }
@@ -221,18 +275,18 @@ function showMetas(data, filterObject, onClick){
 function showSankeyD3(data, containerSelector, conf) {
     $(containerSelector).empty();
 
-    if(!data.length){
+    if (!data.length) {
         $(containerSelector).text("no data for current filters");
         return;
     }
 
-    const height = calcHeight(data, 2)
+    const height = calcHeight(data, 1)
     const width = $(containerSelector).width()
     const graph = formatForSankey(data)
 
     const margin = { top: 10, right: 10, bottom: 10, left: 10 }
-        //width = conf.width//, 800,
-        //height = conf.height //600
+    //width = conf.width//, 800,
+    //height = conf.height //600
 
     // append the svg object to the body of the page
     const svg = d3.select(containerSelector).append("svg")
@@ -269,9 +323,9 @@ function showSankeyD3(data, containerSelector, conf) {
         .data(graph.links)
         .enter()
         .append("text")
-        .text(function (d) { return d.date + " - £" + d3.format(",.2r")(d.value);  })
+        .text(function (d) { return d.date + " - £" + d3.format(",.2r")(d.value); })
         .attr("x", function (d) { return d.source.x + (d.target.x - d.source.x) / 2; })
-        .attr("y", function (d) { return d.source.y+d.sy +d.dy/1.5 })
+        .attr("y", function (d) { return d.source.y + d.sy + d.dy / 1.5 })
 
     const node = svg.append("g")
         .selectAll(".node")
@@ -282,7 +336,7 @@ function showSankeyD3(data, containerSelector, conf) {
         .call(d3.drag()
             .subject(function (d) { return d; })
             .on("start", function () { this.parentNode.appendChild(this); }));
-            //.on("drag", dragmove));
+    //.on("drag", dragmove));
 
     node
         .append("rect")
@@ -323,14 +377,14 @@ function showSankeyD3(data, containerSelector, conf) {
 
 
 
-function onOptionCleared(ev){
-    if(ev.target.value==""){
-        if(ev.target.id=="search_sources"){
-            filterObject.source=undefined
+function onOptionCleared(ev) {
+    if (ev.target.value == "") {
+        if (ev.target.id == "search_sources") {
+            filterObject.source = undefined
         }
 
-        if(ev.target.id=="search_destinations"){
-            filterObject.target=undefined
+        if (ev.target.id == "search_destinations") {
+            filterObject.target = undefined
         }
 
         $(ev.target).trigger("typeahead:select")
@@ -339,7 +393,7 @@ function onOptionCleared(ev){
 }
 
 
-function onYearSelected(ev, suggestion){
+function onYearSelected(ev, suggestion) {
     filterObject.year = suggestion
 
     const _data = filterByFilter(data, filterObject)
@@ -348,12 +402,12 @@ function onYearSelected(ev, suggestion){
 }
 
 
-function onOptionSelected(ev, suggestion){
-    if(ev.target.id=="search_sources"){
+function onOptionSelected(ev, suggestion) {
+    if (ev.target.id == "search_sources") {
         filterObject.source = suggestion
     }
-    
-    if(ev.target.id=="search_destinations"){
+
+    if (ev.target.id == "search_destinations") {
         filterObject.target = suggestion
     }
 
@@ -362,7 +416,7 @@ function onOptionSelected(ev, suggestion){
     showMetas(_data, filterObject, onClickChangeValue)
 }
 
-function onClickChangeValue(e){
+function onClickChangeValue(e) {
     filterObject.target = e.target.innerText
     const _data = filterByFilter(data, filterObject)
     showSankeyD3(_data, "#sankey", { nodeWidth, nodePadding })
