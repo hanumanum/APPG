@@ -94,15 +94,6 @@ function calcGrantTotals(data, field, topCount = 10) {
     return grantTotalsOrdered
 }
 
-/*
-function filterTops(data, number=10){
-    function sortByTotalField(a,b){
-        const aGrantTotal = 
-    }
-    
-    return data.sort(sortByTotalField)
-}*/
-
 function UserException(message, data) {
     this.message = message;
     this.name = 'UserException';
