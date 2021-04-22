@@ -25,23 +25,23 @@ function filterByMP(data, name) {
 }
 
 
-function filterByTop(data, topsArrayOfObjects){
-    const topsArray = topsArrayOfObjects.map(function(currentValue){
+function filterByTop(data) {
+    const grantTotalsData = calcGrantTotals(data,"appg",5)
+    const topsArray = grantTotalsData.map(function (currentValue) {
         return Object.keys(currentValue)[0]
     })
-    
-    function filterCondition(currentValue){
-        return topsArray.includes(currentValue.appg) 
+
+    function filterCondition(currentValue) {
+        return topsArray.includes(currentValue.appg)
     }
-    
-    
     return data.filter(filterCondition)
 }
 
 
 function filterByFilter(data, filter) {
     if (filter.target == undefined && filter.year == undefined) {
-        return data;
+        const _top = filterByTop(data)
+        return _top;
     }
 
     function getFilterContition(v) {
@@ -75,23 +75,23 @@ function calcGrantTotals(data, field, topCount = 10) {
         return accumulator
     }
 
-    function makeArrayFromObject (accumulator, currentValue) {
-        accumulator.push({[currentValue]:grantTotals[currentValue]})
+    function makeArrayFromObject(accumulator, currentValue) {
+        accumulator.push({ [currentValue]: grantTotals[currentValue] })
         return accumulator;
     }
 
-    function sorter(a, b){
-        return b[Object.keys(b)[0]] - a[Object.keys(a)[0]]  
+    function sorter(a, b) {
+        return b[Object.keys(b)[0]] - a[Object.keys(a)[0]]
     }
 
     const grantTotals = data.reduce(calcGrants, {})
     const grantTotalsOrdered = Object.keys(grantTotals)
-                                     .reduce(makeArrayFromObject, [])
-                                     .sort(sorter)
-                                     .splice(0,topCount)
+        .reduce(makeArrayFromObject, [])
+        .sort(sorter)
+        .splice(0, topCount)
 
 
-    return grantTotalsOrdered                           
+    return grantTotalsOrdered
 }
 
 /*
@@ -288,6 +288,7 @@ function showSankeyD3(data, containerSelector, conf) {
     //width = conf.width//, 800,
     //height = conf.height //600
 
+
     // append the svg object to the body of the page
     const svg = d3.select(containerSelector).append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -295,6 +296,8 @@ function showSankeyD3(data, containerSelector, conf) {
         .append("g")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
+
+    const defs = svg.append('defs');
 
     // Color scale used
     const color = d3.scaleOrdinal(d3.schemeCategory20);
@@ -317,6 +320,10 @@ function showSankeyD3(data, containerSelector, conf) {
         .attr("d", sankey.link())
         .style("stroke-width", function (d) { return Math.max(1, d.dy); })
         .sort(function (a, b) { return b.dy - a.dy; })
+
+
+
+
 
     const linkTexts = svg.append("g")
         .selectAll(".link")
@@ -358,6 +365,39 @@ function showSankeyD3(data, containerSelector, conf) {
         .filter(function (d) { return d.x < width / 2; })
         .attr("x", 6 + sankey.nodeWidth())
         .attr("text-anchor", "start");
+
+
+
+
+    link.style('stroke', function (d, i) {
+        console.log(d.source.color, d.target.color);
+
+        const gradientID = `gradient${i}`;
+        const startColor = d.source.color;
+        const stopColor = d.target.color;
+        console.log(gradientID)
+
+        const linearGradient = defs.append('linearGradient')
+            .attr('id', gradientID);
+
+        linearGradient.selectAll('stop')
+            .data([
+                { offset: '10%', color: startColor },
+                { offset: '90%', color: stopColor }
+            ])
+            .enter().append('stop')
+            .attr('offset', d => {
+                //console.log('d.offset', d.offset);
+                return d.offset;
+            })
+            .attr('stop-color', d => {
+                //console.log('d.color', d.color);
+                return d.color;
+            });
+
+        return `url(#${gradientID})`;
+    })
+
 
     /*
     function dragmove(d) {

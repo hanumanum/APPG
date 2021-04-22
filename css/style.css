@@ -73,12 +73,12 @@ input:focus {
 .link {
     fill          : none;
     stroke        : #000;
-    stroke-opacity: .2;
+    stroke-opacity: .5;
     margin-bottom: 1px;
 }
 
 .link:hover {
-    stroke-opacity: .5;
+    stroke-opacity: .8;
 }
 
 .tt-dataset{
