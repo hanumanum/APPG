@@ -26,7 +26,7 @@ function filterByMP(data, name) {
 
 
 function filterByTop(data) {
-    const grantTotalsData = calcGrantTotals(data,"appg",5)
+    const grantTotalsData = calcGrantTotals(data, "appg", 5)
     const topsArray = grantTotalsData.map(function (currentValue) {
         return Object.keys(currentValue)[0]
     })
@@ -65,8 +65,8 @@ function filterByFilter(data, filter) {
 }
 
 
-function addOrderNumbers(data){
-    return data.map(function(val,ind){
+function addOrderNumbers(data) {
+    return data.map(function (val, ind) {
         val.number = ind
         return val
     })
@@ -130,7 +130,7 @@ function checkData(data) {
 }
 
 function fixAPPandSource(data) {
-    if(!DEBUG){
+    if (!DEBUG) {
         return data
     }
 
@@ -226,6 +226,7 @@ function initTypeHead(selector, onOptionSelected, options1, options2 = null) {
     $(selector).bind("typeahead:select", onOptionSelected)
     $(selector).bind("keyup", onOptionCleared)
 
+    fixSearchListWidth("#search_years",".tt-dataset-Year" )
 }
 
 
@@ -245,8 +246,15 @@ function initTypeHeadV2(selector, onOptionSelected, options1, options2, options3
     $(selector).bind("typeahead:select", onOptionSelected)
     $(selector).bind("keyup", onOptionCleared)
 
+    fixSearchListWidth("#search_destinations",".tt-dataset-APPG, .tt-dataset-MP, .tt-dataset-Sources" )
 }
 
+function fixSearchListWidth(widthFromSelector, widthToSelector){
+    setTimeout(function(){
+        const searchInput = $(widthFromSelector);
+        $(widthToSelector).css("width", $(searchInput).css("width") )
+    })
+}
 
 function distinctMetaInfo(data) {
     return data.reduce(function (accumulator, currentValue) {
@@ -265,14 +273,14 @@ function showMetas(data, filterObject, onClick) {
         Object.keys(distinctedData).map(function (d) {
             const mpsList = "<ul><li class='selected_option'>" + distinctedData[d].join("</li><li class='selected_option'>") + "</li></ul>";
             let mpGrUl
-            if(distinctedData[d].length>0){
+            if (distinctedData[d].length > 0) {
                 mpGrUl = $("<li>").prepend(d).append(mpsList)
             }
-            else{
+            else {
                 mpGrUl = $("<li>").prepend(d)
             }
-            
-            
+
+
             $("#destinations_meta > ul").append(mpGrUl)
         })
     }
@@ -325,14 +333,14 @@ function showSankeyD3(data, containerSelector, conf) {
         .attr("class", "link")
         .attr("d", sankey.link())
         .style("stroke-width", function (d) { return Math.max(1, d.dy); })
-        .attr("id", function(d) { return "link_" + d.number})
+        .attr("id", function (d) { return "link_" + d.number })
         .sort(function (a, b) { return b.dy - a.dy; })
 
-    
+
     link.on("mouseenter", onEnterShowText)
     link.on("mouseleave", onLeaveShowText)
 
-    
+
     const linkTexts = svg.append("g")
         .selectAll(".link")
         .data(graph.links)
@@ -341,9 +349,9 @@ function showSankeyD3(data, containerSelector, conf) {
         .text(function (d) { return d.date + " - £" + d3.format(",.2r")(d.value); })
         .attr("x", function (d) { return d.source.x + (d.target.x - d.source.x) / 2; })
         .attr("y", function (d) { return d.source.y + d.sy + d.dy / 1.5 })
-        .attr("id", function(d) { return "link_text_" + d.number})
-        .style("display","none")
-    
+        .attr("id", function (d) { return "link_text_" + d.number })
+        .style("display", "none")
+
     const node = svg.append("g")
         .selectAll(".node")
         .data(graph.nodes)
@@ -352,8 +360,8 @@ function showSankeyD3(data, containerSelector, conf) {
         .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; })
         .call(d3.drag()
             .subject(function (d) { return d; })
-            .on("start", function () { this.parentNode.appendChild(this); }).on("drag", dragmove));
-    
+            .on("start", function () { this.parentNode.appendChild(this); })/*.on("drag", dragmove)*/);
+
     node
         .append("rect")
         .attr("height", function (d) { return d.dy; })
@@ -405,8 +413,7 @@ function showSankeyD3(data, containerSelector, conf) {
         return `url(#${gradientID})`;
     })
 
-
-    
+    /*
     function dragmove(d) {
         d3.select(this)
             .attr("transform",
@@ -418,7 +425,7 @@ function showSankeyD3(data, containerSelector, conf) {
         sankey.relayout();
         link.attr("d", sankey.link());
     }
-    
+    */
 
 }
 
@@ -470,12 +477,12 @@ function onClickChangeValue(e) {
 }
 
 
-function onEnterShowText(d){
-    const textID  = "link_text_" + d.number
-    $('#'+textID).css("display","initial") 
+function onEnterShowText(d) {
+    const textID = "link_text_" + d.number
+    $('#' + textID).css("display", "initial")
 }
 
-function onLeaveShowText(d){
-    const textID  = "link_text_" + d.number
-    $('#'+textID).css("display","none") 
+function onLeaveShowText(d) {
+    const textID = "link_text_" + d.number
+    $('#' + textID).css("display", "none")
 }

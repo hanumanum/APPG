@@ -18,8 +18,8 @@ div {
 }
 
 #header p {
-    width     : 40%;
-    margin    : 20px auto;
+    width     : 60%;
+    margin    : 15px auto;
     text-align: center;
 }
 
@@ -34,9 +34,9 @@ div {
 }
 
 #destinations {
-    width : 20%;
-    height: 100vh;
-    padding-top:90px;
+    width      : 20%;
+    height     : 100vh;
+    padding-top: 90px;
 }
 
 #sankey-holder {
@@ -56,7 +56,7 @@ div {
     justify-content: space-between;
     font-size      : 18px;
     font-weight    : bold;
-    margin-bottom: 8px;
+    margin-bottom  : 8px;
 }
 
 
@@ -95,7 +95,7 @@ input:focus {
 }
 
 .controls {
-    display: flex;
+    display      : flex;
     margin-bottom: 16px;
 }
 
@@ -120,8 +120,9 @@ input:focus {
 }
 
 .tt-dataset {
-    background-color:#f9fdfe;
-    border: solid 1px #dee2e8;
+    background-color: #f9fdfe;
+    border          : solid 1px #dee2e8;
+    width:500px;
 }
 
 .tt-dataset h3 {
@@ -141,10 +142,11 @@ input:focus {
     width           : 100%;
 }
 
-.selected_option{
-    padding:3px 5px;
-    font-weight: normal;
+.selected_option {
+    padding        : 3px 5px;
+    font-weight    : normal;
     list-style-type: disc;
+    list-style-position: inside;
 }
 
 .selected_option:hover {
@@ -158,12 +160,12 @@ input:focus {
 }
 
 #destinations_meta ul {
-    padding-left: 20px;
+    padding-left: 5px;
 }
 
-#destinations_meta > ul {
+#destinations_meta>ul {
     list-style-type: none;
-    font-weight: bold;
+    font-weight    : bold;
 }
 
 
@@ -186,27 +188,27 @@ input:focus {
 
 ::-webkit-input-placeholder {
     text-align: center;
-    color:#cdd1da;
-    font-size: 20px;
+    color     : #cdd1da;
+    font-size : 20px;
 }
 
 :-moz-placeholder {
     text-align: center;
-    color:#cdd1da;
-    font-size: 20px;
+    color     : #cdd1da;
+    font-size : 20px;
 
 }
 
 ::-moz-placeholder {
     text-align: center;
-    color:#cdd1da;
-    font-size: 20px;
+    color     : #cdd1da;
+    font-size : 20px;
 
 }
 
 :-ms-input-placeholder {
     text-align: center;
-    color:#cdd1da;
-    font-size: 20px;
+    color     : #cdd1da;
+    font-size : 20px;
 
 }
