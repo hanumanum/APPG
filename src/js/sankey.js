@@ -64,7 +64,7 @@ d3.sankey = function() {
       return "M" + x0 + "," + y0
            + "C" + x2 + "," + y0
            + " " + x3 + "," + y1
-           + " " + x1 + "," + y1;
+           + " " + x1 + "," + (y1-2);
     }
 
     link.curvature = function(_) {
@@ -262,7 +262,7 @@ d3.sankey = function() {
       node.targetLinks.sort(ascendingSourceDepth);
     });
     nodes.forEach(function(node) {
-      var sy = 0, ty = 0;
+      var sy = 0, ty = 2;
       node.sourceLinks.forEach(function(link) {
         link.sy = sy;
         sy += link.dy;

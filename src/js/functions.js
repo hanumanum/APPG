@@ -64,6 +64,14 @@ function filterByFilter(data, filter) {
     return _data;
 }
 
+
+function addOrderNumbers(data){
+    return data.map(function(val,ind){
+        val.number = ind
+        return val
+    })
+}
+
 function calcGrantTotals(data, field, topCount = 10) {
     function calcGrants(accumulator, currentValue) {
         //console.log(currentValue[field])
@@ -117,11 +125,16 @@ function checkData(data) {
     })
 
     if (same.length) throw new UserException('appg and source can`t be same', same);
+
+    return data
 }
 
-function fixAPPandSoruce(data) {
-    console.warn("DATA ERRORS FIXED, BUT YOU NEED TO CHECK DATA")
+function fixAPPandSource(data) {
+    if(!DEBUG){
+        return data
+    }
 
+    console.warn("DATA ERRORS FIXED, BUT YOU NEED TO CHECK DATA")
     return data.map(function (d) {
         if (d.appg === d.source) {
             d.source += "_"
@@ -132,7 +145,7 @@ function fixAPPandSoruce(data) {
 
 
 function calcHeight(data, ratio) {
-    return 1200
+    return 1400
 
     if (data.length < 30) return 650
     return data.reduce(function (accumulator, currentValue) {
@@ -160,13 +173,12 @@ function formatForSankey(data) {
             source: allNodes.indexOf(d.source),
             target: allNodes.indexOf(d.appg),
             value: d.total,
-            date: d.date
+            date: d.date,
+            number: d.number
         }
     })
 
     sankeyData.links.sort(function (a, b) { return a.date - b.date })
-
-
     return sankeyData;
 }
 
@@ -252,7 +264,15 @@ function showMetas(data, filterObject, onClick) {
     if (filterObject.source || filterObject.target) {
         Object.keys(distinctedData).map(function (d) {
             const mpsList = "<ul><li class='selected_option'>" + distinctedData[d].join("</li><li class='selected_option'>") + "</li></ul>";
-            const mpGrUl = $("<li>").prepend(d).append(mpsList)
+            let mpGrUl
+            if(distinctedData[d].length>0){
+                mpGrUl = $("<li>").prepend(d).append(mpsList)
+            }
+            else{
+                mpGrUl = $("<li>").prepend(d)
+            }
+            
+            
             $("#destinations_meta > ul").append(mpGrUl)
         })
     }
@@ -262,6 +282,7 @@ function showMetas(data, filterObject, onClick) {
     }
 
 }
+
 
 function showSankeyD3(data, containerSelector, conf) {
     $(containerSelector).empty();
@@ -276,11 +297,7 @@ function showSankeyD3(data, containerSelector, conf) {
     const graph = formatForSankey(data)
 
     const margin = { top: 10, right: 10, bottom: 10, left: 10 }
-    //width = conf.width//, 800,
-    //height = conf.height //600
 
-
-    // append the svg object to the body of the page
     const svg = d3.select(containerSelector).append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -289,9 +306,7 @@ function showSankeyD3(data, containerSelector, conf) {
             "translate(" + margin.left + "," + margin.top + ")");
 
     const defs = svg.append('defs');
-
-    // Color scale used
-    const color = d3.scaleOrdinal(d3.schemeCategory20);
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
     const sankey = d3.sankey()
         .nodeWidth(conf.nodeWidth)
         .nodePadding(conf.nodePadding)
@@ -310,12 +325,14 @@ function showSankeyD3(data, containerSelector, conf) {
         .attr("class", "link")
         .attr("d", sankey.link())
         .style("stroke-width", function (d) { return Math.max(1, d.dy); })
+        .attr("id", function(d) { return "link_" + d.number})
         .sort(function (a, b) { return b.dy - a.dy; })
 
+    
+    link.on("mouseenter", onEnterShowText)
+    link.on("mouseleave", onLeaveShowText)
 
-
-
-
+    
     const linkTexts = svg.append("g")
         .selectAll(".link")
         .data(graph.links)
@@ -324,7 +341,9 @@ function showSankeyD3(data, containerSelector, conf) {
         .text(function (d) { return d.date + " - £" + d3.format(",.2r")(d.value); })
         .attr("x", function (d) { return d.source.x + (d.target.x - d.source.x) / 2; })
         .attr("y", function (d) { return d.source.y + d.sy + d.dy / 1.5 })
-
+        .attr("id", function(d) { return "link_text_" + d.number})
+        .style("display","none")
+    
     const node = svg.append("g")
         .selectAll(".node")
         .data(graph.nodes)
@@ -333,9 +352,8 @@ function showSankeyD3(data, containerSelector, conf) {
         .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; })
         .call(d3.drag()
             .subject(function (d) { return d; })
-            .on("start", function () { this.parentNode.appendChild(this); }));
-    //.on("drag", dragmove));
-
+            .on("start", function () { this.parentNode.appendChild(this); }).on("drag", dragmove));
+    
     node
         .append("rect")
         .attr("height", function (d) { return d.dy; })
@@ -358,15 +376,13 @@ function showSankeyD3(data, containerSelector, conf) {
         .attr("text-anchor", "start");
 
 
-
-
     link.style('stroke', function (d, i) {
-        console.log(d.source.color, d.target.color);
+        //console.log(d.source.color, d.target.color);
 
         const gradientID = `gradient${i}`;
         const startColor = d.source.color;
         const stopColor = d.target.color;
-        console.log(gradientID)
+        //console.log(gradientID)
 
         const linearGradient = defs.append('linearGradient')
             .attr('id', gradientID);
@@ -390,7 +406,7 @@ function showSankeyD3(data, containerSelector, conf) {
     })
 
 
-    /*
+    
     function dragmove(d) {
         d3.select(this)
             .attr("transform",
@@ -402,11 +418,9 @@ function showSankeyD3(data, containerSelector, conf) {
         sankey.relayout();
         link.attr("d", sankey.link());
     }
-    */
+    
 
 }
-
-
 
 function onOptionCleared(ev) {
     if (ev.target.value == "") {
@@ -453,4 +467,15 @@ function onClickChangeValue(e) {
     showSankeyD3(_data, "#sankey", { nodeWidth, nodePadding })
     showMetas(_data, filterObject, onClickChangeValue)
     $('#search_destinations').val(filterObject.target)
+}
+
+
+function onEnterShowText(d){
+    const textID  = "link_text_" + d.number
+    $('#'+textID).css("display","initial") 
+}
+
+function onLeaveShowText(d){
+    const textID  = "link_text_" + d.number
+    $('#'+textID).css("display","none") 
 }

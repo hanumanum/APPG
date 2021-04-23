@@ -13,12 +13,11 @@ $(document).ready(function () {
 
     function initSankeyDiagram(_data) {
         data = _data
-        if(DEBUG){
-            _data = fixAPPandSoruce(_data)
-        }
-        checkData(_data)
-        initDestinationsSelect(_data)
         
+        _data = fixAPPandSource(_data)
+        _data = checkData(_data)
+        _data = addOrderNumbers(_data)
+        initDestinationsSelect(_data)
         
         const _top = filterByTop(_data)
         showSankeyD3(_top, "#sankey", { nodeWidth, nodePadding })

@@ -72,12 +72,12 @@ input:focus {
 /* sankey styles */
 .link {
     fill          : none;
-    stroke        : #000;
+    /* stroke        : #000; */
     stroke-opacity: .5;
     margin-bottom: 1px;
 }
 
-.link:hover {
+.link:hover, .link:active {
     stroke-opacity: .8;
 }
 
@@ -115,4 +115,15 @@ input:focus {
     padding-left:20px;
 }
 
+#tooltip{
+    position:fixed;
+}
+
+.tooltip_hidden{
+    display: none;    
+}
+
+.tooltip_shown{
+    display: block;
+}
 /* end of sankey styles */
