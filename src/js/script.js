@@ -14,6 +14,7 @@ $(document).ready(function () {
     function initSankeyDiagram(_data) {
         data = _data
         
+        //TODO: Create composition function for this
         _data = fixAPPandSource(_data)
         _data = checkData(_data)
         _data = addOrderNumbers(_data)

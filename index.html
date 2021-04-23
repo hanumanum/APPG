@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,30 +8,52 @@
     <title>APPG</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <div id="header">
         <h1>heading heading heading</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi sunt ducimus, cum in assumenda dignissimos error excepturi? Eum maxime dolorem reiciendis odio, beatae nesciunt, delectus adipisci possimus assumenda maiores facere!</p>
+        <p>Search your MP or to find out which APPG they sit on and amount of money recived from donors.</p>
     </div>
-    <div id="holder">
-        <div id="sankey">
-            No data for current filter
-        </div>
-        <div id="destinations">
-            <h2>Years</h2>
-            <input type="text" placeholder="Select Year. All is default" class="search_inputs" id="search_years">
-            <h2>Companies, MPs or APPGs</h2>
-            <input type="text" placeholder="Type for search Companies, MPs or APPGs" class="search_inputs" id="search_destinations">
-            <div id="destinations_meta">
-                <ul></ul>
+    <div class="holder-of-holder">
+        <div id="holder">
+            <div id="sources">
+            </div>
+            <div id="sankey-holder">
+                <div class="controls">
+                    <img class="search-icon" src="img/search.svg">
+                    <div class="search_destinations_holder">
+                        <input type="text" placeholder="Search MPs, APPGs or Donor" class="search_inputs"
+                        id="search_destinations">
+                    </div>
+                    <div class="search_years_holder">
+                        <input type="text" placeholder="Year" title="Select Year. All is default" class="search_inputs" id="search_years">
+                    </div>    
+                </div>
+
+                <div class="sankey-titles">
+                    <div class="sankey-titles-left">Donors</div>
+                    <div class="sankey-titles-rigth">APPGs</div>
+                </div>
+                <div id="sankey">
+                    No data for current filter
+                </div>
+            </div>
+            <div id="destinations">
+                <div id="destinations_meta">
+                    <ul></ul>
+                </div>
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js" integrity="sha512-qOBWNAMfkz+vXXgbh0Wz7qYSLZp6c14R0bZeVX2TdQxWpuKr6yHjBIM69fcF8Ve4GUX6B6AKRQJqiiAmwvmUmQ==" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"
+        integrity="sha512-qOBWNAMfkz+vXXgbh0Wz7qYSLZp6c14R0bZeVX2TdQxWpuKr6yHjBIM69fcF8Ve4GUX6B6AKRQJqiiAmwvmUmQ=="
+        crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="src/js/sankey.js"></script>
     <script src="src/js/functions.js"></script>
     <script src="src/js/script.js"></script>
 </body>
+
 </html>

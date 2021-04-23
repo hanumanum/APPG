@@ -36,14 +36,29 @@ div {
 #destinations {
     width : 20%;
     height: 100vh;
+    padding-top:90px;
+}
+
+#sankey-holder {
+    flex-grow : 1;
+    height    : 100vh;
+    text-align: center;
 }
 
 #sankey {
-    flex-grow: 1;
-    height  : 100vh;
+    height    : 100vh;
     text-align: center;
-    margin-top: 20px;
+    width     : 100%;
 }
+
+.sankey-titles {
+    display        : flex;
+    justify-content: space-between;
+    font-size      : 18px;
+    font-weight    : bold;
+    margin-bottom: 8px;
+}
+
 
 .search_inputs {
     margin-top: 5px;
@@ -51,15 +66,37 @@ div {
 }
 
 input {
-    border       : solid 1px gray;
-    border-radius: 0;
-    padding      : 4px;
+    border          : solid 1px #dee2e8;
+    border-radius   : 0;
+    padding         : 4px;
+    height          : 40px;
+    background-color: #f9fdfe;
+}
+
+.search-icon {
+    width     : 40px;
+    margin-top: 5px;
 }
 
 input:focus {
-    border       : solid 1px gray;
+    border       : solid 1px #b9cff0;
     border-radius: 0;
     outline      : none;
+
+}
+
+.search_years_holder {
+    flex       : 0 0 85px;
+    margin-left: 10px;
+}
+
+.search_destinations_holder {
+    flex-grow: 1;
+}
+
+.controls {
+    display: flex;
+    margin-bottom: 16px;
 }
 
 /* typehead css */
@@ -71,59 +108,105 @@ input:focus {
 
 /* sankey styles */
 .link {
-    fill          : none;
+    fill             : none;
     /* stroke        : #000; */
-    stroke-opacity: .5;
-    margin-bottom: 1px;
+    stroke-opacity   : .5;
+    margin-bottom    : 1px;
 }
 
-.link:hover, .link:active {
+.link:hover,
+.link:active {
     stroke-opacity: .8;
 }
 
-.tt-dataset{
-    background-color: white;
+.tt-dataset {
+    background-color:#f9fdfe;
+    border: solid 1px #dee2e8;
 }
 
-.tt-dataset h3{
-    padding:5px;
+.tt-dataset h3 {
+    padding: 5px;
 }
 
-.tt-suggestion.tt-selectable{
-    cursor: pointer;
+.tt-suggestion.tt-selectable {
+    cursor : pointer;
+    padding: 3px 5px;
+    width  : 100%;
+}
+
+.tt-suggestion.tt-selectable:hover,
+.tt-suggestion.tt-selectable.tt-cursor {
+    background-color: darkslateblue;
+    color           : white;
+    width           : 100%;
+}
+
+.selected_option{
     padding:3px 5px;
-    width:100%;
+    font-weight: normal;
+    list-style-type: disc;
 }
 
-.tt-suggestion.tt-selectable:hover,.tt-suggestion.tt-selectable.tt-cursor {
-    background-color:darkslateblue;
-    color:white;
-    width:100%;
+.selected_option:hover {
+    cursor          : pointer;
+    background-color: darkslateblue;
+    color           : white;
 }
 
-.selected_option:hover{
-    cursor: pointer;
-    background-color:darkslateblue;
-    color:white;
+#destinations_meta {
+    margin-top: 10px;
 }
 
-#destinations_meta{
-    margin-top:10px;
+#destinations_meta ul {
+    padding-left: 20px;
 }
 
-#destinations_meta ul{
-    padding-left:20px;
+#destinations_meta > ul {
+    list-style-type: none;
+    font-weight: bold;
 }
 
-#tooltip{
-    position:fixed;
+
+
+#tooltip {
+    position: fixed;
 }
 
-.tooltip_hidden{
-    display: none;    
+.tooltip_hidden {
+    display: none;
 }
 
-.tooltip_shown{
+.tooltip_shown {
     display: block;
 }
+
 /* end of sankey styles */
+
+
+
+::-webkit-input-placeholder {
+    text-align: center;
+    color:#cdd1da;
+    font-size: 20px;
+}
+
+:-moz-placeholder {
+    text-align: center;
+    color:#cdd1da;
+    font-size: 20px;
+
+}
+
+::-moz-placeholder {
+    text-align: center;
+    color:#cdd1da;
+    font-size: 20px;
+
+}
+
+:-ms-input-placeholder {
+    text-align: center;
+    color:#cdd1da;
+    font-size: 20px;
+
+}
