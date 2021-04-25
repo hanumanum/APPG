@@ -4,7 +4,6 @@ const nodePadding = 10
 const DEBUG = true
 let data = {}
 const filterObject = {
-    source:undefined,
     target:undefined
 }
 
@@ -20,7 +19,7 @@ $(document).ready(function () {
         _data = addOrderNumbers(_data)
         initDestinationsSelect(_data)
         
-        const _top = filterByTop(_data)
+        const _top = filterByTop()
         showSankeyD3(_top, "#sankey", { nodeWidth, nodePadding })
     }
 
@@ -29,8 +28,8 @@ $(document).ready(function () {
         const mps = getMPsList(data)
         const sources = getSuggestionList(data, "source")
         const years = getSuggestionList(data,"date")
-        initTypeHeadV2('#search_destinations', onOptionSelected, { data: mps, title: "MP" }, { data: appgs, title: "APPG" },  { data:sources, title:"Sources"})
-        initTypeHead('#search_years', onYearSelected, { data: years, title: "Year" })
+        initTypeHead('#search_destinations', onOptionSelected, [{ data: mps, title: "MP" }, { data: appgs, title: "APPG" },  { data:sources, title:"Sources"}])
+        initTypeHead('#search_years', onYearSelected, [{ data: years, title: "Year" }])
     }
 
 });

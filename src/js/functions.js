@@ -25,7 +25,7 @@ function filterByMP(data, name) {
 }
 
 
-function filterByTop(data) {
+function filterByTop() {
     const grantTotalsData = calcGrantTotals(data, "appg", 5)
     const topsArray = grantTotalsData.map(function (currentValue) {
         return Object.keys(currentValue)[0]
@@ -45,7 +45,7 @@ function filterByFilter(data, filter) {
     }
 
     function getFilterContition(v) {
-        const defaultFilter = (v.source == filter.source || v.source == filter.target || v.appg == filter.target || v.mps.includes(filter.target))
+        const defaultFilter = (v.source == filter.target || v.appg == filter.target || v.mps.includes(filter.target))
         const yearFilter = (v.date == filter.year)
 
         if (filter.year && filter.target == undefined) {
@@ -206,50 +206,31 @@ function createOptionsFonfig(options) {
     }
 }
 
-
-function initTypeHead(selector, onOptionSelected, options1, options2 = null) {
-    const opt1 = createOptionsFonfig(options1);
+function initTypeHead(selector, onOptionSelected, optionsArray /* options1, options2, options3 */) {
     const conf = {
         highlight: true,
         minLength: 0,
         hint: true
     }
 
-    if (options2) {
-        const opt2 = createOptionsFonfig(options2);
-        $(selector).typeahead(conf, opt1, opt2);
-    }
-    else {
-        $(selector).typeahead(conf, opt1);
-    }
+    const optionsConfigsArray = optionsArray.map(function(cv){
+        return createOptionsFonfig(cv);
+    })
 
+    $(selector).typeahead(conf, ...optionsConfigsArray);
     $(selector).bind("typeahead:select", onOptionSelected)
     $(selector).bind("keyup", onOptionCleared)
 
-    fixSearchListWidth("#search_years", ".tt-dataset-Year")
+    fixListsWidth()
 }
 
+function fixListsWidth(){
+    fixSearchLitWidth("#search_destinations", ".tt-dataset-APPG, .tt-dataset-MP, .tt-dataset-Sources")
+    fixSearchLitWidth("#search_years", ".tt-dataset-Year")
 
-function initTypeHeadV2(selector, onOptionSelected, options1, options2, options3) {
-    const conf = {
-        highlight: true,
-        minLength: 0,
-        hint: true
-    }
-
-
-    const opt1 = createOptionsFonfig(options1);
-    const opt2 = createOptionsFonfig(options2);
-    const opt3 = createOptionsFonfig(options3);
-
-    $(selector).typeahead(conf, opt1, opt2, opt3);
-    $(selector).bind("typeahead:select", onOptionSelected)
-    $(selector).bind("keyup", onOptionCleared)
-
-    fixSearchListWidth("#search_destinations", ".tt-dataset-APPG, .tt-dataset-MP, .tt-dataset-Sources")
 }
 
-function fixSearchListWidth(widthFromSelector, widthToSelector) {
+function fixSearchLitWidth(widthFromSelector, widthToSelector) {
     setTimeout(function () {
         const searchInput = $(widthFromSelector);
         $(widthToSelector).css("width", $(searchInput).css("width"))
@@ -265,7 +246,7 @@ function distinctMetaInfo(data) {
     }, {})
 }
 
-
+//TODO: remove later, may be not nessesery
 function showMetas(data, filterObject, onClick) {
     $("#destinations_meta ul").empty()
 
@@ -453,24 +434,18 @@ function onYearSelected(ev, suggestion) {
 
     const _data = filterByFilter(data, filterObject)
     showSankeyD3(_data, "#sankey", { nodeWidth, nodePadding })
-    showMetas(_data, filterObject, onClickChangeValue)
     showMPtoAPPGRelations(filterObject.target)
     console.log(filterObject)
 }
 
 
 function onOptionSelected(ev, suggestion) {
-    if (ev.target.id == "search_sources") {
-        filterObject.source = suggestion
-    }
-
     if (ev.target.id == "search_destinations") {
         filterObject.target = suggestion
     }
     console.log(filterObject)
     const _data = filterByFilter(data, filterObject)
     showSankeyD3(_data, "#sankey", { nodeWidth, nodePadding })
-    showMetas(_data, filterObject, onClickChangeValue)
     showMPtoAPPGRelations(filterObject.target)
 }
 
@@ -478,8 +453,6 @@ function onClickChangeValue(e) {
     filterObject.target = e.target.innerText
     const _data = filterByFilter(data, filterObject)
     showSankeyD3(_data, "#sankey", { nodeWidth, nodePadding })
-    showMetas(_data, filterObject, onClickChangeValue)
-    
     $('#search_destinations').val(filterObject.target)
     showMPtoAPPGRelations(filterObject.target)
 }
@@ -494,9 +467,6 @@ function onLeaveShowText(d) {
     const textID = "link_text_" + d.number
     $('#' + textID).css("display", "none")
 }
-
-
-//extractMPdata(data,"Geraint Davies")
 
 function getMPtoAPPGRelations(mpname) {
     function filter(a) {
