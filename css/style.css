@@ -235,6 +235,7 @@ div#mpoverview {
     text-align : left;
     width: 80%;
     margin: 0 auto;
+    color:#58585a;
 }
 
 .sankey-titles-rigth, .sankey-titles-left{

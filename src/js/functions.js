@@ -302,9 +302,9 @@ function showSankeyD3(data, containerSelector, conf) {
         return;
     }
 
+    const MAGIC_FIX = 40
     const height = calcHeight(data, 1)
-    const width = $(containerSelector).width() - 40
-    console.log(width)
+    const width = $(containerSelector).width() - MAGIC_FIX
     const graph = formatForSankey(data)
 
     const margin = { top: 10, right: 10, bottom: 10, left: 10 }
@@ -455,6 +455,7 @@ function onYearSelected(ev, suggestion) {
     showSankeyD3(_data, "#sankey", { nodeWidth, nodePadding })
     showMetas(_data, filterObject, onClickChangeValue)
     showMPtoAPPGRelations(filterObject.target)
+    console.log(filterObject)
 }
 
 
@@ -466,7 +467,7 @@ function onOptionSelected(ev, suggestion) {
     if (ev.target.id == "search_destinations") {
         filterObject.target = suggestion
     }
-
+    console.log(filterObject)
     const _data = filterByFilter(data, filterObject)
     showSankeyD3(_data, "#sankey", { nodeWidth, nodePadding })
     showMetas(_data, filterObject, onClickChangeValue)
@@ -528,7 +529,6 @@ function getMPtoAPPGRelations(mpname) {
 
 
 function showMPtoAPPGRelations(mpname) {
-    console.log(mpname)
     $("#mpoverview").empty()
     
     const info = getMPtoAPPGRelations(mpname)
