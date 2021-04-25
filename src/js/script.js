@@ -29,7 +29,7 @@ $(document).ready(function () {
         const mps = getMPsList(data)
         const sources = getSuggestionList(data, "source")
         const years = getSuggestionList(data,"date")
-        initTypeHeadV2('#search_destinations', onOptionSelected, { data: appgs, title: "APPG" }, { data: mps, title: "MP" }, { data:sources, title:"Sources"})
+        initTypeHeadV2('#search_destinations', onOptionSelected, { data: mps, title: "MP" }, { data: appgs, title: "APPG" },  { data:sources, title:"Sources"})
         initTypeHead('#search_years', onYearSelected, { data: years, title: "Year" })
     }
 

@@ -226,7 +226,7 @@ function initTypeHead(selector, onOptionSelected, options1, options2 = null) {
     $(selector).bind("typeahead:select", onOptionSelected)
     $(selector).bind("keyup", onOptionCleared)
 
-    fixSearchListWidth("#search_years",".tt-dataset-Year" )
+    fixSearchListWidth("#search_years", ".tt-dataset-Year")
 }
 
 
@@ -246,13 +246,13 @@ function initTypeHeadV2(selector, onOptionSelected, options1, options2, options3
     $(selector).bind("typeahead:select", onOptionSelected)
     $(selector).bind("keyup", onOptionCleared)
 
-    fixSearchListWidth("#search_destinations",".tt-dataset-APPG, .tt-dataset-MP, .tt-dataset-Sources" )
+    fixSearchListWidth("#search_destinations", ".tt-dataset-APPG, .tt-dataset-MP, .tt-dataset-Sources")
 }
 
-function fixSearchListWidth(widthFromSelector, widthToSelector){
-    setTimeout(function(){
+function fixSearchListWidth(widthFromSelector, widthToSelector) {
+    setTimeout(function () {
         const searchInput = $(widthFromSelector);
-        $(widthToSelector).css("width", $(searchInput).css("width") )
+        $(widthToSelector).css("width", $(searchInput).css("width"))
     })
 }
 
@@ -268,6 +268,7 @@ function distinctMetaInfo(data) {
 
 function showMetas(data, filterObject, onClick) {
     $("#destinations_meta ul").empty()
+
     const distinctedData = distinctMetaInfo(data)
     if (filterObject.source || filterObject.target) {
         Object.keys(distinctedData).map(function (d) {
@@ -285,12 +286,13 @@ function showMetas(data, filterObject, onClick) {
         })
     }
 
+    //console.log(filterObject.source, filterObject.target)
+
     if (onClick) {
         $(".selected_option").on("click", onClick)
     }
 
 }
-
 
 function showSankeyD3(data, containerSelector, conf) {
     $(containerSelector).empty();
@@ -301,7 +303,8 @@ function showSankeyD3(data, containerSelector, conf) {
     }
 
     const height = calcHeight(data, 1)
-    const width = $(containerSelector).width()
+    const width = $(containerSelector).width() - 40
+    console.log(width)
     const graph = formatForSankey(data)
 
     const margin = { top: 10, right: 10, bottom: 10, left: 10 }
@@ -451,6 +454,7 @@ function onYearSelected(ev, suggestion) {
     const _data = filterByFilter(data, filterObject)
     showSankeyD3(_data, "#sankey", { nodeWidth, nodePadding })
     showMetas(_data, filterObject, onClickChangeValue)
+    showMPtoAPPGRelations(filterObject.target)
 }
 
 
@@ -466,6 +470,7 @@ function onOptionSelected(ev, suggestion) {
     const _data = filterByFilter(data, filterObject)
     showSankeyD3(_data, "#sankey", { nodeWidth, nodePadding })
     showMetas(_data, filterObject, onClickChangeValue)
+    showMPtoAPPGRelations(filterObject.target)
 }
 
 function onClickChangeValue(e) {
@@ -473,7 +478,9 @@ function onClickChangeValue(e) {
     const _data = filterByFilter(data, filterObject)
     showSankeyD3(_data, "#sankey", { nodeWidth, nodePadding })
     showMetas(_data, filterObject, onClickChangeValue)
+    
     $('#search_destinations').val(filterObject.target)
+    showMPtoAPPGRelations(filterObject.target)
 }
 
 
@@ -486,3 +493,50 @@ function onLeaveShowText(d) {
     const textID = "link_text_" + d.number
     $('#' + textID).css("display", "none")
 }
+
+
+//extractMPdata(data,"Geraint Davies")
+
+function getMPtoAPPGRelations(mpname) {
+    function filter(a) {
+        return a.mps.includes(mpname)
+    }
+
+    function reducerAppg(accumulator, currentValue) {
+        accumulator.push(currentValue.appg)
+        return accumulator;
+    }
+
+    function reducerYear(accumulator, currentValue) {
+        accumulator.push(currentValue.date)
+        return accumulator;
+    }
+
+    const mpData = data.filter(filter)
+    const overview = {
+        appgs: mpData.reduce(reducerAppg, []).filter(distinct),
+        years: mpData.reduce(reducerYear, []).filter(distinct)
+    }
+
+    overview.appgCount = overview.appgs.length
+    overview.yearMin = Math.min(...overview.years)
+    overview.yearMax = Math.max(...overview.years)
+    overview.name = mpname
+
+    return overview
+}
+
+
+function showMPtoAPPGRelations(mpname) {
+    console.log(mpname)
+    $("#mpoverview").empty()
+    
+    const info = getMPtoAPPGRelations(mpname)
+    if (!info.appgCount)
+        return
+
+    const str = `${info.name} is a member of ${info.appgCount} All-Party Parliamentary Group${(info.appgCount!=1)?"s":""} that received funding in ${info.yearMin}-${info.yearMax}.`;
+    $("#mpoverview").html(str)
+}
+
+

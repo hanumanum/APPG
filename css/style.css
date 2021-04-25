@@ -18,14 +18,15 @@ div {
 }
 
 #header p {
-    width     : 60%;
-    margin    : 15px auto;
-    text-align: center;
+    width: 80%;
+    margin: 15px auto;
+    text-align: left;
+    padding-left: 41px;
 }
 
 
 #holder {
-    display: flex;
+    /* display: flex; */
 }
 
 #sources {
@@ -40,7 +41,7 @@ div {
 }
 
 #sankey-holder {
-    flex-grow : 1;
+    /* flex-grow : 1; */
     height    : 100vh;
     text-align: center;
 }
@@ -48,15 +49,17 @@ div {
 #sankey {
     height    : 100vh;
     text-align: center;
-    width     : 100%;
+    /*width     : 96%;*/
+    margin: 0 auto;
 }
 
 .sankey-titles {
     display        : flex;
     justify-content: space-between;
-    font-size      : 18px;
+    font-size      : 19px;
     font-weight    : bold;
     margin-bottom  : 8px;
+    padding: 0 15px;
 }
 
 
@@ -71,11 +74,13 @@ input {
     padding         : 4px;
     height          : 40px;
     background-color: #f9fdfe;
+    font-size: 19px;
 }
 
 .search-icon {
-    width     : 40px;
-    margin-top: 5px;
+    width      : 40px;
+    margin-top : 5px;
+    margin-left: 40px;
 }
 
 input:focus {
@@ -95,8 +100,9 @@ input:focus {
 }
 
 .controls {
-    display      : flex;
-    margin-bottom: 16px;
+    display: flex;
+    width: 80%;
+    margin: 0 auto 16px auto;
 }
 
 /* typehead css */
@@ -122,7 +128,7 @@ input:focus {
 .tt-dataset {
     background-color: #f9fdfe;
     border          : solid 1px #dee2e8;
-    width:500px;
+    width           : 500px;
 }
 
 .tt-dataset h3 {
@@ -133,6 +139,8 @@ input:focus {
     cursor : pointer;
     padding: 3px 5px;
     width  : 100%;
+    text-align: left;
+    font-size: 19px;
 }
 
 .tt-suggestion.tt-selectable:hover,
@@ -142,10 +150,15 @@ input:focus {
     width           : 100%;
 }
 
+
+.tt-dataset.tt-dataset-Year .tt-suggestion{
+    text-align: center;
+}
+
 .selected_option {
-    padding        : 3px 5px;
-    font-weight    : normal;
-    list-style-type: disc;
+    padding            : 3px 5px;
+    font-weight        : normal;
+    list-style-type    : disc;
     list-style-position: inside;
 }
 
@@ -156,7 +169,8 @@ input:focus {
 }
 
 #destinations_meta {
-    margin-top: 10px;
+    margin-top: 64px;
+    padding-left:5px;
 }
 
 #destinations_meta ul {
@@ -212,3 +226,32 @@ input:focus {
     font-size : 20px;
 
 }
+
+div#mpoverview {
+    font-size  : 18px;
+    font-weight: normal;
+    height     : 40px;
+    padding    : 3px 5px 3px 40px;
+    text-align : left;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.sankey-titles-rigth, .sankey-titles-left{
+    border-bottom: solid 3px #cdd1da;
+    color: #58585a;
+    margin: 0px 5px;
+}
+
+
+.sankey-titles-left {
+    padding-right: 40px;
+} 
+
+.sankey-titles-rigth {
+    padding-left: 40px;
+}
+
+/*
+
+*/
