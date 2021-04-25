@@ -2,10 +2,7 @@ const dataURL = "data/data_all.json"
 const nodeWidth = 20 
 const nodePadding = 10
 const DEBUG = true
-let data = {}
-const filterObject = {
-    target:undefined
-}
+let datarepo;
 
 $(document).ready(function () {
     $.get(dataURL, initSankeyDiagram, "json");
@@ -13,21 +10,19 @@ $(document).ready(function () {
     function initSankeyDiagram(_data) {
         data = _data
         
-        //TODO: Create composition function for this
-        _data = fixAPPandSource(_data)
-        _data = checkData(_data)
-        _data = addOrderNumbers(_data)
-        initDestinationsSelect(_data)
+        datarepo = dataRepository(data)
+        initTypeheadSelect(datarepo.getAll())
         
-        const _top = filterByTop()
-        showSankeyD3(_top, "#sankey", { nodeWidth, nodePadding })
+        datarepo.addFilter("top", true)
+        const top = datarepo.getFiltered()
+        showSankeyD3(top, "#sankey", { nodeWidth, nodePadding })
     }
 
-    function initDestinationsSelect(data) {
-        const appgs = getSuggestionList(data, "appg")
-        const mps = getMPsList(data)
-        const sources = getSuggestionList(data, "source")
-        const years = getSuggestionList(data,"date")
+    function initTypeheadSelect(data) {
+        const appgs = datarepo.getSuggestionList("appg")
+        const mps = datarepo.getMPsList()
+        const sources = datarepo.getSuggestionList("source")
+        const years = datarepo.getSuggestionList("date")
         initTypeHead('#search_destinations', onOptionSelected, [{ data: mps, title: "MP" }, { data: appgs, title: "APPG" },  { data:sources, title:"Sources"}])
         initTypeHead('#search_years', onYearSelected, [{ data: years, title: "Year" }])
     }

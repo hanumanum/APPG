@@ -2,106 +2,6 @@ function distinct(value, index, self) {
     return self.indexOf(value) === index
 }
 
-function getSuggestionList(data, keyname) {
-    return data.map(function (d) { return d[keyname] }).filter(distinct).sort()
-}
-
-function getMPsList(data) {
-    return data.reduce(function (accumulator, currentValue) {
-        return accumulator.concat(currentValue.mps)
-    }, []).filter(distinct).sort()
-}
-
-function filterBy(data, key, value) {
-    return data.filter(function (v) {
-        return v[key] === value
-    })
-}
-
-function filterByMP(data, name) {
-    return data.filter(function (v) {
-        return v.mps.includes(name)
-    })
-}
-
-
-function filterByTop() {
-    const grantTotalsData = calcGrantTotals(data, "appg", 5)
-    const topsArray = grantTotalsData.map(function (currentValue) {
-        return Object.keys(currentValue)[0]
-    })
-
-    function filterCondition(currentValue) {
-        return topsArray.includes(currentValue.appg)
-    }
-    return data.filter(filterCondition)
-}
-
-
-function filterByFilter(data, filter) {
-    if (filter.target == undefined && filter.year == undefined) {
-        const _top = filterByTop(data)
-        return _top;
-    }
-
-    function getFilterContition(v) {
-        const defaultFilter = (v.source == filter.target || v.appg == filter.target || v.mps.includes(filter.target))
-        const yearFilter = (v.date == filter.year)
-
-        if (filter.year && filter.target == undefined) {
-            return yearFilter
-        }
-        else if (filter.target && filter.year == undefined) {
-            return defaultFilter
-        }
-        else {
-            return defaultFilter && yearFilter
-        }
-
-    }
-
-    const _data = data.filter(getFilterContition)
-    return _data;
-}
-
-
-function addOrderNumbers(data) {
-    return data.map(function (val, ind) {
-        val.number = ind
-        return val
-    })
-}
-
-function calcGrantTotals(data, field, topCount = 10) {
-    function calcGrants(accumulator, currentValue) {
-        //console.log(currentValue[field])
-
-        if (!(currentValue[field] in accumulator)) {
-            accumulator[currentValue[field]] = 0
-        }
-        accumulator[currentValue[field]] += currentValue['total']
-        return accumulator
-    }
-
-    function makeArrayFromObject(accumulator, currentValue) {
-        accumulator.push({ [currentValue]: grantTotals[currentValue] })
-        return accumulator;
-    }
-
-    function sorter(a, b) {
-        return b[Object.keys(b)[0]] - a[Object.keys(a)[0]]
-    }
-
-    const grantTotals = data.reduce(calcGrants, {})
-    const grantTotalsOrdered = Object.keys(grantTotals)
-        .reduce(makeArrayFromObject, [])
-        .sort(sorter)
-        .splice(0, topCount)
-
-
-    return grantTotalsOrdered
-}
-
 function UserException(message, data) {
     this.message = message;
     this.name = 'UserException';
@@ -119,40 +19,19 @@ function concatDistinct(arr1, arr2) {
     return [...new Set([...arr1, ...arr2])];
 }
 
-function checkData(data) {
-    const same = data.filter(function (d) {
-        return d.appg === d.source
-    })
-
-    if (same.length) throw new UserException('appg and source can`t be same', same);
-
-    return data
-}
-
-function fixAPPandSource(data) {
-    if (!DEBUG) {
-        return data
-    }
-
-    console.warn("DATA ERRORS FIXED, BUT YOU NEED TO CHECK DATA")
-    return data.map(function (d) {
-        if (d.appg === d.source) {
-            d.source += "_"
-        }
-        return d
-    })
-}
-
-
 function calcHeight(data, ratio) {
-    return 1400
+    return 900
 
     if (data.length < 30) return 650
     return data.reduce(function (accumulator, currentValue) {
         return accumulator + currentValue.total / data.length
     }, 0) * ratio
-
 }
+
+function extractNodesBy(data, keyname) {
+    return data.map(function (d) { return d[keyname] }).filter(distinct).sort()
+}
+
 
 function formatForSankey(data) {
     const sankeyData = {
@@ -160,7 +39,7 @@ function formatForSankey(data) {
         , links: []  //array of {source:value, target:value, value:value}
     }
 
-    const allNodes = getSuggestionList(data, "source").concat(getSuggestionList(data, "appg"))
+    const allNodes = extractNodesBy(data, "source").concat(extractNodesBy(data, "appg"))
     sankeyData.nodes = allNodes.map(function (d, i) {
         return {
             node: i,
@@ -195,31 +74,31 @@ function substringMatcher(strs) {
 };
 
 
-function createOptionsFonfig(options) {
-    return {
-        name: options.title,
-        source: substringMatcher(options.data),
-        limit: options.data.length,
-        templates: {
-            header: '<h3>' + options.title + '</h3>'
-        }
-    }
-}
-
-function initTypeHead(selector, onOptionSelected, optionsArray /* options1, options2, options3 */) {
+function initTypeHead(selector, onOptionSelected, optionsArray) {
     const conf = {
         highlight: true,
         minLength: 0,
         hint: true
     }
 
+    function createOptionsFonfig(options) {
+        return {
+            name: options.title,
+            source: substringMatcher(options.data),
+            limit: options.data.length,
+            templates: {
+                header: '<h3>' + options.title + '</h3>'
+            }
+        }
+    }
+
     const optionsConfigsArray = optionsArray.map(function(cv){
         return createOptionsFonfig(cv);
     })
 
-    $(selector).typeahead(conf, ...optionsConfigsArray);
-    $(selector).bind("typeahead:select", onOptionSelected)
-    $(selector).bind("keyup", onOptionCleared)
+    $(selector).typeahead(conf, ...optionsConfigsArray)
+                .bind("typeahead:select", onOptionSelected)
+                .bind("keyup", onOptionCleared)
 
     fixListsWidth()
 }
@@ -227,7 +106,6 @@ function initTypeHead(selector, onOptionSelected, optionsArray /* options1, opti
 function fixListsWidth(){
     fixSearchLitWidth("#search_destinations", ".tt-dataset-APPG, .tt-dataset-MP, .tt-dataset-Sources")
     fixSearchLitWidth("#search_years", ".tt-dataset-Year")
-
 }
 
 function fixSearchLitWidth(widthFromSelector, widthToSelector) {
@@ -244,35 +122,6 @@ function distinctMetaInfo(data) {
         accumulator[currentValue.appg] = concatDistinct(first, second)
         return accumulator
     }, {})
-}
-
-//TODO: remove later, may be not nessesery
-function showMetas(data, filterObject, onClick) {
-    $("#destinations_meta ul").empty()
-
-    const distinctedData = distinctMetaInfo(data)
-    if (filterObject.source || filterObject.target) {
-        Object.keys(distinctedData).map(function (d) {
-            const mpsList = "<ul><li class='selected_option'>" + distinctedData[d].join("</li><li class='selected_option'>") + "</li></ul>";
-            let mpGrUl
-            if (distinctedData[d].length > 0) {
-                mpGrUl = $("<li>").prepend(d).append(mpsList)
-            }
-            else {
-                mpGrUl = $("<li>").prepend(d)
-            }
-
-
-            $("#destinations_meta > ul").append(mpGrUl)
-        })
-    }
-
-    //console.log(filterObject.source, filterObject.target)
-
-    if (onClick) {
-        $(".selected_option").on("click", onClick)
-    }
-
 }
 
 function showSankeyD3(data, containerSelector, conf) {
@@ -325,7 +174,7 @@ function showSankeyD3(data, containerSelector, conf) {
     link.on("mouseleave", onLeaveShowText)
 
 
-    const linkTexts = svg.append("g")
+    svg.append("g")
         .selectAll(".link")
         .data(graph.links)
         .enter()
@@ -369,12 +218,9 @@ function showSankeyD3(data, containerSelector, conf) {
 
 
     link.style('stroke', function (d, i) {
-        //console.log(d.source.color, d.target.color);
-
         const gradientID = `gradient${i}`;
         const startColor = d.source.color;
         const stopColor = d.target.color;
-        //console.log(gradientID)
 
         const linearGradient = defs.append('linearGradient')
             .attr('id', gradientID);
@@ -386,41 +232,21 @@ function showSankeyD3(data, containerSelector, conf) {
             ])
             .enter().append('stop')
             .attr('offset', d => {
-                //console.log('d.offset', d.offset);
                 return d.offset;
             })
             .attr('stop-color', d => {
-                //console.log('d.color', d.color);
                 return d.color;
             });
 
         return `url(#${gradientID})`;
     })
 
-    /*
-    function dragmove(d) {
-        d3.select(this)
-            .attr("transform",
-                "translate("
-                + d.x + ","
-                + (d.y = Math.max(
-                    0, Math.min(height - d.dy, d3.event.y))
-                ) + ")");
-        sankey.relayout();
-        link.attr("d", sankey.link());
-    }
-    */
-
 }
 
 function onOptionCleared(ev) {
     if (ev.target.value == "") {
-        if (ev.target.id == "search_sources") {
-            filterObject.source = undefined
-        }
-
         if (ev.target.id == "search_destinations") {
-            filterObject.target = undefined
+            datarepo.removeFilter("text") 
         }
 
         $(ev.target).trigger("typeahead:select")
@@ -428,33 +254,19 @@ function onOptionCleared(ev) {
 
 }
 
-
 function onYearSelected(ev, suggestion) {
-    filterObject.year = suggestion
-
-    const _data = filterByFilter(data, filterObject)
-    showSankeyD3(_data, "#sankey", { nodeWidth, nodePadding })
-    showMPtoAPPGRelations(filterObject.target)
-    console.log(filterObject)
+    datarepo.addFilter("year", suggestion)
+    const filtered = datarepo.getFiltered()
+    showSankeyD3(filtered, "#sankey", { nodeWidth, nodePadding })
+    showMPtoAPPGRelations(suggestion)
 }
 
 
 function onOptionSelected(ev, suggestion) {
-    if (ev.target.id == "search_destinations") {
-        filterObject.target = suggestion
-    }
-    console.log(filterObject)
-    const _data = filterByFilter(data, filterObject)
-    showSankeyD3(_data, "#sankey", { nodeWidth, nodePadding })
-    showMPtoAPPGRelations(filterObject.target)
-}
-
-function onClickChangeValue(e) {
-    filterObject.target = e.target.innerText
-    const _data = filterByFilter(data, filterObject)
-    showSankeyD3(_data, "#sankey", { nodeWidth, nodePadding })
-    $('#search_destinations').val(filterObject.target)
-    showMPtoAPPGRelations(filterObject.target)
+    datarepo.addFilter("text", suggestion)
+    const filtered = datarepo.getFiltered()
+    showSankeyD3(filtered, "#sankey", { nodeWidth, nodePadding })
+    showMPtoAPPGRelations(suggestion)
 }
 
 
