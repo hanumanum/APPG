@@ -259,3 +259,12 @@ iframe {
     display: block;
     margin: 50px auto
 }
+
+#infopopap{
+    width: 260px;
+    background-color: rgb(4, 67, 100,0.6);
+    color: white;
+    padding: 7px 9px;
+    z-index: 99999999;
+    position: absolute;
+}
