@@ -12,7 +12,9 @@ $(document).ready(function () {
         
         datarepo = dataRepository(data)
         initTypeheadSelect(datarepo.getAll())
-        
+        //const bounds = datarepo.getValueBounds()
+        //console.log(bounds)
+
         datarepo.addFilter("top", true)
         const top = datarepo.getFiltered()
         showSankeyD3(top, "#sankey", { nodeWidth, nodePadding })

@@ -154,7 +154,20 @@ function dataRepository(_data) {
     }
 
 
+    function getValueBounds(){
+        const max = data.reduce(function(accumulator, currentValue){
+            return Math.max(accumulator,currentValue.total)
+        },0)
 
-    return { getFiltered, getAll, addFilter, removeFilter, getSuggestionList, getMPsList }
+        const min = data.reduce(function(accumulator, currentValue){
+            return Math.min(accumulator,currentValue.total)
+        },max)
+
+        const rato = max/min
+
+        return {min, max, rato}
+    }
+
+    return { getFiltered, getAll, addFilter, removeFilter, getSuggestionList, getMPsList, getValueBounds }
 
 }
