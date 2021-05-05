@@ -51,6 +51,7 @@ div {
     text-align  : center;
     /*width     : 96%;*/
     margin      : 0 auto;
+    background-color: beige;
 }
 
 .sankey-titles {
