@@ -137,7 +137,7 @@ function showSankeyD3(data, containerSelector, conf) {
     const width = $(containerSelector).width() - MAGIC_FIX
     const graph = formatForSankey(data)
 
-    const margin = { top: 10, right: 10, bottom: 10, left: 10 }
+    const margin = { top: 30, right: 10, bottom: 10, left: 10 }
 
     const svg = d3.select(containerSelector).append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -171,7 +171,8 @@ function showSankeyD3(data, containerSelector, conf) {
 
 
     link.on("mouseenter", onEnterShowText)
-    link.on("mouseleave", (d) => debounce(() => onLeaveShowText(d)))
+    link.on("mouseleave", onLeaveShowText)
+
 
     /*
     svg.append("g")
@@ -194,32 +195,31 @@ function showSankeyD3(data, containerSelector, conf) {
     const node = svg.append("g")
         .selectAll(".node")
         .data(graph.nodes)
+        .attr("pointer-events", "all")
         .enter().append("g")
         .attr("class", "node")
-        .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; })
-        .call(d3.drag()
-            .subject(function (d) { return d; })
-            .on("start", function () { this.parentNode.appendChild(this); })/*.on("drag", dragmove)*/);
+        .attr("transform", function (d) {
+            return "translate(" + d.x + "," + d.y + ")";
+        })
+
 
     node
         .append("rect")
         .attr("height", function (d) { return d.dy; })
         .attr("width", sankey.nodeWidth())
         .style("fill", function (d) { return d.color = color(d.name.replace(/ .*/, "")); })
-        .style("stroke", function (d) { return d3.rgb(d.color).darker(2); })
-        .append("title")
-        .text(function (d) { return d.name + "\n" + "Total: " + "£" + d3.format(",.2r")(d.value); });
+    //.style("stroke", function (d) { return d3.rgb(d.color).darker(2); })
+    //.append("title")
+    //.text(function (d) { return d.name + "\n" + "Total: " + "£" + d3.format(",.2r")(d.value); });
 
     node
         .append("text")
-        .attr("x", -6)
-        .attr("y", function (d) { return d.dy / 2; })
-        .attr("dy", ".35em")
+        .attr("x", + 20) //For destinations
+        .attr("y", -6)
         .attr("text-anchor", "end")
-        .attr("transform", null)
         .text(function (d) { return d.name + " £" + d3.format(",.2r")(d.value); })
         .filter(function (d) { return d.x < width / 2; })
-        .attr("x", 6 + sankey.nodeWidth())
+        .attr("x",  sankey.nodeWidth() - 20) //Sources destinations
         .attr("text-anchor", "start");
 
 
@@ -284,15 +284,16 @@ function onEnterShowText(d, b) {
     $("#infopopap").show()
     $("#infopopap").html(text)
 
-    /* remove this */
-    //const textID = "link_text_" + d.number
-    //$('#' + textID).css("display", "initial")
 }
 
-function onLeaveShowText(d) {
+function hideText() {
     $("#infopopap").hide()
     $("#infopopap").text("")
 }
+
+const onLeaveShowText = debounce(hideText, 400)
+
+
 
 function getMPtoAPPGRelations(mpname) {
     function filter(a) {
@@ -396,7 +397,7 @@ function scaleByAni() {
 
 
 
-function initMouseCoordinates(){
+function initMouseCoordinates() {
     window.cursorx = 0
     window.cursory = 0
 
@@ -424,10 +425,17 @@ function initMouseCoordinates(){
 }
 
 
-function debounce(func, timeout = 300) {
-    let timer
-    return (...args) => {
-        clearTimeout(timer)
-        timer = setTimeout(() => { func.apply(this, args) }, timeout)
+function debounce(func, wait = 300, immediate) {
+    var timeout
+    return function () {
+        const context = this, args = arguments
+        const later = function () {
+            timeout = null
+            if (!immediate) func.apply(context, args)
+        }
+        const callNow = immediate && !timeout
+        clearTimeout(timeout)
+        timeout = setTimeout(later, wait)
+        if (callNow) func.apply(context, args)
     }
 }
