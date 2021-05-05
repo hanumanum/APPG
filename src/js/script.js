@@ -2,7 +2,9 @@ const dataURL = "data/data_all.json"
 const nodeWidth = 20 
 const nodePadding = 10
 const DEBUG = true
+initMouseCoordinates()
 let datarepo;
+
 
 $(document).ready(function () {
     $.get(dataURL, initSankeyDiagram, "json");

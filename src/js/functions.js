@@ -171,8 +171,7 @@ function showSankeyD3(data, containerSelector, conf) {
 
 
     link.on("mouseenter", onEnterShowText)
-    link.on("mouseleave", onLeaveShowText)
-
+    link.on("mouseleave", (d) => debounce(() => onLeaveShowText(d)))
 
     /*
     svg.append("g")
@@ -277,10 +276,11 @@ function onOptionSelected(ev, suggestion) {
 }
 
 
-function onEnterShowText(d) {
+function onEnterShowText(d, b) {
+    //d.stopPropagation()
     const text = d.source.name + " &rarr; " + d.target.name + " <br> " + "£" + d3.format(",.2r")(d.value) + " (" + d.date + ")";
-    
-    $("#infopopap").css({"left":cursorx, "top":cursory-50})
+    const left = $(window).width() / 2 - $("#infopopap").width() / 2;
+    $("#infopopap").css({ "left": left, "top": cursory - 50 })
     $("#infopopap").show()
     $("#infopopap").html(text)
 
@@ -290,8 +290,8 @@ function onEnterShowText(d) {
 }
 
 function onLeaveShowText(d) {
-   $("#infopopap").hide()
-   $("#infopopap").text("")
+    $("#infopopap").hide()
+    $("#infopopap").text("")
 }
 
 function getMPtoAPPGRelations(mpname) {
@@ -361,13 +361,13 @@ function calcBezierCurvePseudoCenterByX(d, X) {
     }
     else if (disc == 0) {
         t1 = (-b + Math.sqrt(disc)) / (2 * a)
-        console.log({t1})
+        console.log({ t1 })
         Y1 = Math.pow((1 - t1), 2) * y1 + 2 * (1 - t1) * t1 * y2 + Math.pow(t1, 2) * y3
     }
     else {
         t1 = (-b + Math.sqrt(disc)) / (2 * a)
         t2 = (-b - Math.sqrt(disc)) / (2 * a)
-        console.log({t1},{t2})
+        console.log({ t1 }, { t2 })
         Y1 = Math.pow((1 - t1), 2) * y1 + 2 * (1 - t1) * t1 * y2 + Math.pow(t1, 2) * y3
         Y2 = Math.pow((1 - t2), 2) * y2 + 2 * (1 - t2) * t2 * y2 + Math.pow(t2, 2) * y3
     }
@@ -376,27 +376,30 @@ function calcBezierCurvePseudoCenterByX(d, X) {
 }
 
 
-function scaleByAni(){
-    
+function scaleByAni() {
+
     return ["#992425",
-    "#044364",
-    "#ecc21c",
-    "#376f96",
-    "#699f95",
-    "#806b65",
-    "#cf6367",
-    "#64284c",
-    "#28387d",
-    "#ba4127"]
-    
+        "#044364",
+        "#ecc21c",
+        "#376f96",
+        "#699f95",
+        "#806b65",
+        "#cf6367",
+        "#64284c",
+        "#28387d",
+        "#ba4127"]
+
     return d3.schemeCategory10
 
-    return ["#67001f","#6a011f","#6d0220","#700320","#730421","#760521","#790622","#7b0722","#7e0823","#810923","#840a24","#870b24","#8a0c25","#8c0d26","#8f0f26","#921027","#941127","#971228","#9a1429","#9c1529","#9f172a","#a1182b","#a41a2c","#a61c2d","#a81d2d","#aa1f2e","#ad212f","#af2330","#b12531","#b32732","#b52933","#b72b34","#b82e35","#ba3036","#bc3238","#be3539","#bf373a","#c13a3b","#c33c3d","#c43f3e","#c6413f","#c74441","#c94742","#ca4943","#cc4c45","#cd4f46","#ce5248","#d0544a","#d1574b","#d25a4d","#d45d4e","#d56050","#d66252","#d86554","#d96855","#da6b57","#db6d59","#dd705b","#de735d","#df755f","#e07861","#e17b63","#e27d65","#e48067","#e58369","#e6856b","#e7886d","#e88b6f","#e98d71","#ea9073","#eb9276","#ec9578","#ed977a","#ee9a7c","#ee9c7f","#ef9f81","#f0a183","#f1a486","#f2a688","#f2a88b","#f3ab8d","#f4ad90","#f4af92","#f5b295","#f5b497","#f6b69a","#f6b89c","#f7ba9f","#f7bda1","#f8bfa4","#f8c1a6","#f8c3a9","#f9c5ab","#f9c7ae","#f9c9b0","#facab3","#faccb5","#faceb8","#fad0ba","#fad2bc","#fad3bf","#fad5c1","#fbd7c4","#fbd8c6","#fbdac8","#fbdbca","#fbddcc","#fadecf","#fae0d1","#fae1d3","#fae2d5","#fae3d7","#fae5d8","#fae6da","#f9e7dc","#f9e8de","#f9e9e0","#f8eae1","#f8eae3","#f7ebe4","#f7ece6","#f6ede7","#f6ede8","#f5eee9","#f4eeeb","#f4efec","#f3efed","#f2efed","#f1efee","#f0f0ef","#eff0f0","#eef0f0","#edf0f1","#eceff1","#ebeff1","#eaeff2","#e9eff2","#e7eef2","#e6eef2","#e5edf2","#e3edf2","#e2ecf2","#e0ecf2","#dfebf2","#ddeaf2","#dbeaf1","#dae9f1","#d8e8f1","#d6e7f0","#d4e6f0","#d3e6f0","#d1e5ef","#cfe4ef","#cde3ee","#cbe2ee","#c9e1ed","#c7e0ed","#c5dfec","#c2ddec","#c0dceb","#bedbea","#bcdaea","#bad9e9","#b7d8e8","#b5d7e8","#b2d5e7","#b0d4e6","#aed3e6","#abd1e5","#a9d0e4","#a6cfe3","#a3cde3","#a1cce2","#9ecae1","#9cc9e0","#99c7e0","#96c6df","#93c4de","#91c3dd","#8ec1dc","#8bc0db","#88beda","#85bcd9","#83bbd8","#80b9d7","#7db7d7","#7ab5d6","#77b3d5","#74b2d4","#71b0d3","#6faed2","#6cacd1","#69aad0","#66a8cf","#64a7ce","#61a5cd","#5ea3cc","#5ba1cb","#599fca","#569dc9","#549bc8","#5199c7","#4f98c6","#4d96c5","#4b94c4","#4892c3","#4690c2","#448ec1","#428cc0","#408bbf","#3e89be","#3d87bd","#3b85bc","#3983bb","#3781ba","#3680b9","#347eb7","#337cb6","#317ab5","#3078b4","#2e76b2","#2d75b1","#2c73b0","#2a71ae","#296fad","#286dab","#266baa","#2569a8","#2467a6","#2365a4","#2164a2","#2062a0","#1f609e","#1e5e9c","#1d5c9a","#1b5a98","#1a5895","#195693","#185490","#17528e","#164f8b","#154d89","#134b86","#124983","#114781","#10457e","#0f437b","#0e4178","#0d3f75","#0c3d73","#0a3b70","#09386d","#08366a","#073467","#063264","#053061"]
+    return ["#67001f", "#6a011f", "#6d0220", "#700320", "#730421", "#760521", "#790622", "#7b0722", "#7e0823", "#810923", "#840a24", "#870b24", "#8a0c25", "#8c0d26", "#8f0f26", "#921027", "#941127", "#971228", "#9a1429", "#9c1529", "#9f172a", "#a1182b", "#a41a2c", "#a61c2d", "#a81d2d", "#aa1f2e", "#ad212f", "#af2330", "#b12531", "#b32732", "#b52933", "#b72b34", "#b82e35", "#ba3036", "#bc3238", "#be3539", "#bf373a", "#c13a3b", "#c33c3d", "#c43f3e", "#c6413f", "#c74441", "#c94742", "#ca4943", "#cc4c45", "#cd4f46", "#ce5248", "#d0544a", "#d1574b", "#d25a4d", "#d45d4e", "#d56050", "#d66252", "#d86554", "#d96855", "#da6b57", "#db6d59", "#dd705b", "#de735d", "#df755f", "#e07861", "#e17b63", "#e27d65", "#e48067", "#e58369", "#e6856b", "#e7886d", "#e88b6f", "#e98d71", "#ea9073", "#eb9276", "#ec9578", "#ed977a", "#ee9a7c", "#ee9c7f", "#ef9f81", "#f0a183", "#f1a486", "#f2a688", "#f2a88b", "#f3ab8d", "#f4ad90", "#f4af92", "#f5b295", "#f5b497", "#f6b69a", "#f6b89c", "#f7ba9f", "#f7bda1", "#f8bfa4", "#f8c1a6", "#f8c3a9", "#f9c5ab", "#f9c7ae", "#f9c9b0", "#facab3", "#faccb5", "#faceb8", "#fad0ba", "#fad2bc", "#fad3bf", "#fad5c1", "#fbd7c4", "#fbd8c6", "#fbdac8", "#fbdbca", "#fbddcc", "#fadecf", "#fae0d1", "#fae1d3", "#fae2d5", "#fae3d7", "#fae5d8", "#fae6da", "#f9e7dc", "#f9e8de", "#f9e9e0", "#f8eae1", "#f8eae3", "#f7ebe4", "#f7ece6", "#f6ede7", "#f6ede8", "#f5eee9", "#f4eeeb", "#f4efec", "#f3efed", "#f2efed", "#f1efee", "#f0f0ef", "#eff0f0", "#eef0f0", "#edf0f1", "#eceff1", "#ebeff1", "#eaeff2", "#e9eff2", "#e7eef2", "#e6eef2", "#e5edf2", "#e3edf2", "#e2ecf2", "#e0ecf2", "#dfebf2", "#ddeaf2", "#dbeaf1", "#dae9f1", "#d8e8f1", "#d6e7f0", "#d4e6f0", "#d3e6f0", "#d1e5ef", "#cfe4ef", "#cde3ee", "#cbe2ee", "#c9e1ed", "#c7e0ed", "#c5dfec", "#c2ddec", "#c0dceb", "#bedbea", "#bcdaea", "#bad9e9", "#b7d8e8", "#b5d7e8", "#b2d5e7", "#b0d4e6", "#aed3e6", "#abd1e5", "#a9d0e4", "#a6cfe3", "#a3cde3", "#a1cce2", "#9ecae1", "#9cc9e0", "#99c7e0", "#96c6df", "#93c4de", "#91c3dd", "#8ec1dc", "#8bc0db", "#88beda", "#85bcd9", "#83bbd8", "#80b9d7", "#7db7d7", "#7ab5d6", "#77b3d5", "#74b2d4", "#71b0d3", "#6faed2", "#6cacd1", "#69aad0", "#66a8cf", "#64a7ce", "#61a5cd", "#5ea3cc", "#5ba1cb", "#599fca", "#569dc9", "#549bc8", "#5199c7", "#4f98c6", "#4d96c5", "#4b94c4", "#4892c3", "#4690c2", "#448ec1", "#428cc0", "#408bbf", "#3e89be", "#3d87bd", "#3b85bc", "#3983bb", "#3781ba", "#3680b9", "#347eb7", "#337cb6", "#317ab5", "#3078b4", "#2e76b2", "#2d75b1", "#2c73b0", "#2a71ae", "#296fad", "#286dab", "#266baa", "#2569a8", "#2467a6", "#2365a4", "#2164a2", "#2062a0", "#1f609e", "#1e5e9c", "#1d5c9a", "#1b5a98", "#1a5895", "#195693", "#185490", "#17528e", "#164f8b", "#154d89", "#134b86", "#124983", "#114781", "#10457e", "#0f437b", "#0e4178", "#0d3f75", "#0c3d73", "#0a3b70", "#09386d", "#08366a", "#073467", "#063264", "#053061"]
 }
 
 
 
-(function() {
+function initMouseCoordinates(){
+    window.cursorx = 0
+    window.cursory = 0
+
     document.onmousemove = handleMouseMove;
     function handleMouseMove(event) {
         var eventDoc, doc, body;
@@ -408,14 +411,23 @@ function scaleByAni(){
             body = eventDoc.body;
 
             event.pageX = event.clientX +
-              (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
-              (doc && doc.clientLeft || body && body.clientLeft || 0);
+                (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+                (doc && doc.clientLeft || body && body.clientLeft || 0);
             event.pageY = event.clientY +
-              (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
-              (doc && doc.clientTop  || body && body.clientTop  || 0 );
+                (doc && doc.scrollTop || body && body.scrollTop || 0) -
+                (doc && doc.clientTop || body && body.clientTop || 0);
         }
 
         window.cursorx = event.pageX
         window.cursory = event.pageY
     }
-})();
+}
+
+
+function debounce(func, timeout = 300) {
+    let timer
+    return (...args) => {
+        clearTimeout(timer)
+        timer = setTimeout(() => { func.apply(this, args) }, timeout)
+    }
+}
