@@ -98,16 +98,11 @@ function initTypeHead(selector, onOptionSelected, optionsArray) {
     $(selector).typeahead(conf, ...optionsConfigsArray)
         .bind("typeahead:select", onOptionSelected)
         .bind("keyup", onOptionCleared)
-        .bind("focus", onFocus)
-        .bind("click", onFocus)
+        .bind("focus", clearAndReopenAll)
+        .bind("click", clearAndReopenAll)
 
     fixListsWidth()
 }
-
-function onFocus(e) {
-    $("#" + e.target.id).typeahead('val', "");
-}
-
 
 function fixListsWidth() {
     fixSearchLitWidth("#search_destinations", ".tt-dataset-APPG, .tt-dataset-MP, .tt-dataset-Sources")
@@ -179,25 +174,6 @@ function showSankeyD3(data, containerSelector, conf) {
     link.on("mouseenter", onEnterShowText)
     link.on("mouseleave", onLeaveShowText)
 
-
-    /*
-    svg.append("g")
-        .selectAll(".link")
-        .data(graph.links)
-        .enter()
-        .append("text")
-        .text(function (d) { return d.date + " - £" + d3.format(",.2r")(d.value); })
-        .attr("x", function (d) { return d.source.x + (d.target.x - d.source.x) / 2; })
-        //.attr("y", function (d) { console.log(sankey.linkCoords()); return d.source.y + d.sy + d.dy / 1.5 })
-        .attr("y", function (d) {
-            const X = d.source.x + (d.target.x - d.source.x) / 2
-            const Ys = calcBezierCurvePseudoCenterByX(d, X)
-            console.log({ Ys })
-            return Ys[1]
-        })
-        .attr("id", function (d) { return "link_text_" + d.number })
-        .style("display", "none")
-    */
     const node = svg.append("g")
         .selectAll(".node")
         .data(graph.nodes)
@@ -255,7 +231,9 @@ function showSankeyD3(data, containerSelector, conf) {
 
 }
 
+//TODO: may be not neccessery, decide later
 function onOptionCleared(ev) {
+    return 
     if (ev.target.value == "") {
         if (ev.target.id == "search_destinations") {
             datarepo.removeFilter("text")
@@ -263,7 +241,6 @@ function onOptionCleared(ev) {
 
         $(ev.target).trigger("typeahead:select")
     }
-
 }
 
 function onYearSelected(ev, suggestion) {
@@ -291,6 +268,11 @@ function onEnterShowText(d, b) {
     $("#infopopap").html(text)
 
 }
+
+function clearAndReopenAll(e) {
+    $("#" + e.target.id).typeahead('val', "");
+}
+
 
 function hideText() {
     $("#infopopap").hide()
