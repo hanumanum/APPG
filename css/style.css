@@ -1,8 +1,14 @@
+@font-face {
+    font-family: 'Libre Baskerville';
+    src        : local("Libre Baskerville"), url(../fonts/LibreBaskerville-Regular.ttf) format("ttf"), url(../fonts/LibreBaskerville-Regular.woff2) format("woff2"), url(../fonts/LibreBaskerville-Regular.woff) format("woff");
+}
+
 *,
 body {
-    margin    : 0;
-    padding   : 0;
-    box-sizing: border-box;
+    margin     : 0;
+    padding    : 0;
+    box-sizing : border-box;
+    font-family: 'Libre Baskerville';
 }
 
 div {
@@ -47,10 +53,10 @@ div {
 }
 
 #sankey {
-    height      : 100vh;
-    text-align  : center;
-    /*width     : 96%;*/
-    margin      : 0 auto;
+    height          : 100vh;
+    text-align      : center;
+    /*width         : 96%;*/
+    margin          : 0 auto;
     background-color: beige;
 }
 
@@ -258,14 +264,14 @@ div#mpoverview {
 
 iframe {
     display: block;
-    margin: 50px auto
+    margin : 50px auto
 }
 
-#infopopap{
-    width: 260px;
-    background-color: rgb(4, 67, 100,0.6);
-    color: white;
-    padding: 7px 9px;
-    z-index: 99999999;
-    position: absolute;
+#infopopap {
+    width           : 260px;
+    background-color: rgb(4, 67, 100, 0.6);
+    color           : white;
+    padding         : 7px 9px;
+    z-index         : 99999999;
+    position        : absolute;
 }
