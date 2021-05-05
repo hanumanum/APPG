@@ -73,7 +73,6 @@ function substringMatcher(strs) {
     };
 };
 
-
 function initTypeHead(selector, onOptionSelected, optionsArray) {
     const conf = {
         highlight: true,
@@ -99,9 +98,16 @@ function initTypeHead(selector, onOptionSelected, optionsArray) {
     $(selector).typeahead(conf, ...optionsConfigsArray)
         .bind("typeahead:select", onOptionSelected)
         .bind("keyup", onOptionCleared)
+        .bind("focus", onFocus)
+        .bind("click", onFocus)
 
     fixListsWidth()
 }
+
+function onFocus(e) {
+    $("#" + e.target.id).typeahead('val', "");
+}
+
 
 function fixListsWidth() {
     fixSearchLitWidth("#search_destinations", ".tt-dataset-APPG, .tt-dataset-MP, .tt-dataset-Sources")
@@ -219,7 +225,7 @@ function showSankeyD3(data, containerSelector, conf) {
         .attr("text-anchor", "end")
         .text(function (d) { return d.name + " £" + d3.format(",.2r")(d.value); })
         .filter(function (d) { return d.x < width / 2; })
-        .attr("x",  sankey.nodeWidth() - 20) //Sources destinations
+        .attr("x", sankey.nodeWidth() - 20) //Sources destinations
         .attr("text-anchor", "start");
 
 

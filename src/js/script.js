@@ -28,6 +28,7 @@ $(document).ready(function () {
         const mps = datarepo.getMPsList()
         const sources = datarepo.getSuggestionList("source")
         const years = datarepo.getSuggestionList("date")
+        years.push("All years")
         initTypeHead('#search_destinations', onOptionSelected, [{ data: mps, title: "MP" }, { data: appgs, title: "APPG" },  { data:sources, title:"Sources"}])
         initTypeHead('#search_years', onYearSelected, [{ data: years, title: "Year" }])
     }

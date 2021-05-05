@@ -23,6 +23,8 @@ function dataRepository(_data) {
     }
 
     function getFiltered() {
+        filter.year = (filter.year=="All years") ? filter.year = undefined :  filter.year
+
         if (filter.top && filter.text) {
             filter.top = false
             return getFiltered()
