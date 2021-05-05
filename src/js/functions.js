@@ -201,7 +201,7 @@ function showSankeyD3(data, containerSelector, conf) {
         .attr("text-anchor", "end")
         .text(function (d) { return d.name + " £" + d3.format(",.2r")(d.value); })
         .filter(function (d) { return d.x < width / 2; })
-        .attr("x", sankey.nodeWidth() - 20) //Sources destinations
+        .attr("x", sankey.nodeWidth() - 20) //For Sources 
         .attr("text-anchor", "start");
 
 
@@ -260,6 +260,7 @@ function onOptionSelected(ev, suggestion) {
 
 
 function onEnterShowText(d, b) {
+    return
     //d.stopPropagation()
     const text = d.source.name + " &rarr; " + d.target.name + " <br> " + "£" + d3.format(",.2r")(d.value) + " (" + d.date + ")";
     const left = $(window).width() / 2 - $("#infopopap").width() / 2;
@@ -269,18 +270,17 @@ function onEnterShowText(d, b) {
 
 }
 
-function clearAndReopenAll(e) {
-    $("#" + e.target.id).typeahead('val', "");
-}
-
-
 function hideText() {
     $("#infopopap").hide()
     $("#infopopap").text("")
 }
 
-const onLeaveShowText = debounce(hideText, 400)
+const onLeaveShowText = debounce(hideText, 800)
 
+
+function clearAndReopenAll(e) {
+    $("#" + e.target.id).typeahead('val', "");
+}
 
 
 function getMPtoAPPGRelations(mpname) {

@@ -53,7 +53,7 @@ div {
 }
 
 #sankey {
-    height          : 100vh;
+    min-height      : 100vh;
     text-align      : center;
     /*width         : 96%;*/
     margin          : 0 auto;
