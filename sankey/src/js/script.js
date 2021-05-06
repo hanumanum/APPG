@@ -1,4 +1,4 @@
-const dataURL = "data/data_all.json"
+const dataURL = "../data/data_all.json"
 const nodeWidth = 20 
 const nodePadding = 25
 const DEBUG = true
