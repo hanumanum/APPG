@@ -272,33 +272,43 @@ iframe {
 }
 
 
-.firstpage{
-    width: auto !important;
+.firstpage {
+    width     : auto !important;
     text-align: left !important;
-    height: auto !important;
+    height    : auto !important;
 }
 
 /* Table Layout Styles */
-#table{
-    width: 100%;
+#table {
+    width          : 98%;
     border-collapse: collapse;
+    margin         : 0 auto;
 }
 
-#tbody{
-    
-}
-
-br{
+br {
     height: 20px;
 }
 
-tr{
+tr {
     border-bottom: solid 4px maroon;
 }
 
-td{
-     padding: 5px 8px;
-     width: 24.8%;
+thead tr {
+    border: none;
+}
+
+thead tr th {
+    font-weight    : bold;
+    text-decoration: underline;
+    font-size      : 19px;
+    padding        : 18px;
+}
+
+td {
+    padding     : 12px 10px;
+    width       : 24.8%;
+    border-left : solid 1px gray;
+    border-right: solid 1px gray;
 }
 
 /* end of Table Layout Styles */
