@@ -280,12 +280,25 @@ iframe {
 
 /* Table Layout Styles */
 #table{
-    border: solid 1px gray;
     width: 100%;
+    border-collapse: collapse;
 }
 
 #tbody{
     
+}
+
+br{
+    height: 20px;
+}
+
+tr{
+    border-bottom: solid 4px maroon;
+}
+
+td{
+     padding: 5px 8px;
+     width: 24.8%;
 }
 
 /* end of Table Layout Styles */

@@ -114,13 +114,46 @@ function showTableD3(data, containerSelector, conf) {
         return;
     }
 
-    const b = datarepo.formatForTable(data)
-    console.log(b)
+    const _data = datarepo.formatForTable(data)
+    console.log(_data)
 
     const table = d3.select(containerSelector)
-    table.selectAll("tr")
-    //table.data(graph.links)
-    
+    const tr = table.selectAll("tr")
+        .data(_data)
+        .enter()
+        .append('tr')
+
+    const reduceDonors = function (a, v) { return a +=  v.source+"<br>" }
+    const reduceDonations = function (a, v) { return a += v.total+"<br>" }
+    const columns = ["appg", "transactions", "transactions", "total"]
+
+    const cells = tr.selectAll("td")
+        .data(function (row) {
+            return columns.map(function (column, index) {
+                return { column: column, index: index, value: row[column] }
+            });
+        })
+        .enter()
+        .append('td')
+        .html(function (d) {
+
+            if (d.index === 0) {
+                return d.value
+            }
+            else if (d.index === 1) {
+                return d.value.reduce(reduceDonors, "")
+            }
+            else if (d.index === 2) {
+                return d.value.reduce(reduceDonations, "")
+            }
+            else if (d.index === 3) {
+                return " £" + d3.format(",.2r")(d.value)
+            }
+        })
+
+    //.append("")
+
+
     /*
     const MAGIC_FIX = 40
     const height = calcHeight(data, 1)
