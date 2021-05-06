@@ -171,7 +171,7 @@ function dataRepository(_data) {
     }
 
 
-    function groupByAPPG(data) {
+    function formatForTable(data) {
         const onlyappg = function (v) { return v.appg }
         const reformat = function (v) { return { appg: v, transactions: [] } }
         const sum = function (a, c) { return a += c.total }
@@ -210,6 +210,41 @@ function dataRepository(_data) {
 
     }
 
-    return { groupByAPPG, getFiltered, getAll, addFilter, removeFilter, getSuggestionList, getMPsList, getValueBounds }
+
+    function formatForSankey(data) {
+        const sankeyData = {
+            nodes: []  //array of {name:value}
+            , links: []  //array of {source:value, target:value, value:value}
+        }
+    
+        const allNodes = extractNodesBy(data, "source").concat(extractNodesBy(data, "appg"))
+        sankeyData.nodes = allNodes.map(function (d, i) {
+            return {
+                node: i,
+                name: d
+            }
+        })
+    
+        sankeyData.links = data.map(function (d) {
+            return {
+                source: allNodes.indexOf(d.source),
+                target: allNodes.indexOf(d.appg),
+                value: d.total,
+                date: d.date,
+                number: d.number
+            }
+        })
+    
+        sankeyData.links.sort(function (a, b) { return a.date - b.date })
+        return sankeyData;
+    }
+    
+
+
+    function extractNodesBy(data, keyname) {
+        return data.map(function (d) { return d[keyname] }).filter(distinct).sort()
+    }
+
+    return {formatForSankey, formatForTable, getFiltered, getAll, addFilter, removeFilter, getSuggestionList, getMPsList, getValueBounds }
 
 }

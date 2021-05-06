@@ -9,7 +9,7 @@ function showSankeyD3(data, containerSelector, conf) {
     const MAGIC_FIX = 40
     const height = calcHeight(data, 1)
     const width = $(containerSelector).width() - MAGIC_FIX
-    const graph = formatForSankey(data)
+    const graph = datarepo.formatForSankey(data)
 
     const margin = { top: 30, right: 10, bottom: 10, left: 10 }
 
@@ -114,7 +114,7 @@ function showTableD3(data, containerSelector, conf) {
         return;
     }
 
-    const b = datarepo.groupByAPPG(data)
+    const b = datarepo.formatForTable(data)
     console.log(b)
 
     const table = d3.select(containerSelector)
