@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>APPGs, Sources, MPs money flow diagram</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
@@ -27,14 +27,28 @@
                         <input type="text" value="2020" placeholder="Year" title="Select Year. All is default" class="search_inputs" id="search_years">
                     </div>    
                 </div>
-                <div id="mpoverview" class="firstpage">
-                    <a href="sankey/iframe-test.html">Sankey Version (Iframed)</a><br>
-                    <a href="sankey/index.html">Sankey Version</a><br>
-                    <a href="table/iframe-test.html">Table Version (Iframed)</a><br>
-                    <a href="table/index.html">Table Version</a><br>
+                <div id="mpoverview"></div>
+                <div class="sankey-titles">
+                    <div class="sankey-titles-left">Donors</div>
+                    <div class="sankey-titles-rigth">APPGs</div>
+                </div>
+                <div id="sankey">
+                    No data for current filter
                 </div>
             </div>
         </div>
     </div>
+    <div id="infopopap"></div>
+    <script src="../src/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"
+        integrity="sha512-qOBWNAMfkz+vXXgbh0Wz7qYSLZp6c14R0bZeVX2TdQxWpuKr6yHjBIM69fcF8Ve4GUX6B6AKRQJqiiAmwvmUmQ=="
+        crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="../src/functions.js"></script>
+    <script src="../src/datarepository.js"></script>
+    <script src="../src/sankey.js"></script>
+    <script src="../src/layouts.js"></script>
+    <script src="src/js/script.js"></script>
 </body>
+
 </html>

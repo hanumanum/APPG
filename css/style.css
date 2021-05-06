@@ -270,3 +270,10 @@ iframe {
     z-index         : 99999999;
     position        : absolute;
 }
+
+
+.firstpage{
+    width: auto !important;
+    text-align: left !important;
+    height: auto !important;
+}
