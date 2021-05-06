@@ -2,7 +2,7 @@ function dataRepository(_data) {
     _data = fixAPPandSource(_data)
     _data = checkData(_data)
     _data = addOrderNumbers(_data)
-    
+
     const data = _data
     const filter = {
         text: undefined,
@@ -23,7 +23,7 @@ function dataRepository(_data) {
     }
 
     function getFiltered() {
-        filter.year = (filter.year=="All years") ? filter.year = undefined :  filter.year
+        filter.year = (filter.year == "All years") ? filter.year = undefined : filter.year
 
         if (filter.top && filter.text) {
             filter.top = false
@@ -156,20 +156,60 @@ function dataRepository(_data) {
     }
 
 
-    function getValueBounds(){
-        const max = data.reduce(function(accumulator, currentValue){
-            return Math.max(accumulator,currentValue.total)
-        },0)
+    function getValueBounds() {
+        const max = data.reduce(function (accumulator, currentValue) {
+            return Math.max(accumulator, currentValue.total)
+        }, 0)
 
-        const min = data.reduce(function(accumulator, currentValue){
-            return Math.min(accumulator,currentValue.total)
-        },max)
+        const min = data.reduce(function (accumulator, currentValue) {
+            return Math.min(accumulator, currentValue.total)
+        }, max)
 
-        const rato = max/min
+        const rato = max / min
 
-        return {min, max, rato}
+        return { min, max, rato }
     }
 
-    return { getFiltered, getAll, addFilter, removeFilter, getSuggestionList, getMPsList, getValueBounds }
+
+    function groupByAPPG(data) {
+        const onlyappg = function (v) { return v.appg }
+        const reformat = function (v) { return { appg: v, transactions: [] } }
+        const sum = function (a, c) { return a += c.total }
+        const sorter = function (a, b) { return b.total - a.total }
+
+
+        const findTransactons = function (data, appg) {
+            return data.filter(function (v) {
+                return v.appg == appg
+            })
+        }
+
+        const fillTansactions = function (v) {
+            v.transactions = findTransactons(data, v.appg)
+            return v
+        }
+
+        const calctotals = function (v) {
+            v.total = v.transactions.reduce(sum, 0)
+            return v
+        }
+
+        const sortByTotals = function (v) {
+            v.transactions = v.transactions.sort(sorter)
+            return v
+        }
+
+        return data
+            .map(onlyappg)
+            .filter(distinct)
+            .sort()
+            .map(reformat)
+            .map(fillTansactions)
+            .map(calctotals)
+            .map(sortByTotals)
+
+    }
+
+    return { groupByAPPG, getFiltered, getAll, addFilter, removeFilter, getSuggestionList, getMPsList, getValueBounds }
 
 }

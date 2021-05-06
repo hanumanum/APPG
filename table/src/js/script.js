@@ -1,4 +1,4 @@
-const dataURL = "../data/data_all.json"
+const dataURL = "../data/data_few.json"
 const nodeWidth = 20 
 const nodePadding = 25
 const DEBUG = true
@@ -17,10 +17,11 @@ $(document).ready(function () {
         //const bounds = datarepo.getValueBounds()
         //console.log(bounds)
 
-        datarepo.addFilter("top", true)
-        datarepo.addFilter("year", 2020)
-        const top = datarepo.getFiltered()
-        showSankeyD3(top, "#sankey", { nodeWidth, nodePadding })
+        //datarepo.addFilter("top", true)
+        //datarepo.addFilter("year", 2020)
+        //const top = datarepo.getFiltered()
+        const all = datarepo.getAll()
+        showTableD3(all, "#tbody", { nodeWidth, nodePadding })
     }
 
     function initTypeheadSelect(data) {

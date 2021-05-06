@@ -277,3 +277,15 @@ iframe {
     text-align: left !important;
     height: auto !important;
 }
+
+/* Table Layout Styles */
+#table{
+    border: solid 1px gray;
+    width: 100%;
+}
+
+#tbody{
+    
+}
+
+/* end of Table Layout Styles */
