@@ -1,4 +1,4 @@
-const dataURL = "../data/data_few.json"
+const dataURL = "../data/data_all.json"
 const nodeWidth = 20 
 const nodePadding = 25
 const DEBUG = true
@@ -18,10 +18,10 @@ $(document).ready(function () {
         //console.log(bounds)
 
         //datarepo.addFilter("top", true)
-        //datarepo.addFilter("year", 2020)
-        //const top = datarepo.getFiltered()
-        const all = datarepo.getAll()
-        showTableD3(all, "#tbody", { nodeWidth, nodePadding })
+        datarepo.addFilter("year", 2020)
+        const top = datarepo.getFiltered()
+        //const all = datarepo.getAll()
+        showTableD3(top, "#tbody")
     }
 
     function initTypeheadSelect(data) {
@@ -29,9 +29,9 @@ $(document).ready(function () {
         const mps = datarepo.getMPsList()
         const sources = datarepo.getSuggestionList("source")
         const years = datarepo.getSuggestionList("date")
-        years.push("All years")
-        initTypeHead('#search_destinations', onOptionSelected, [{ data: mps, title: "MP" }, { data: appgs, title: "APPG" },  { data:sources, title:"Sources"}])
-        initTypeHead('#search_years', onYearSelected, [{ data: years, title: "Year" }])
+        //years.push("All years")
+        initTypeHead('#search_destinations', onOptionSelected_tableVersion, [{ data: mps, title: "MP" }, { data: appgs, title: "APPG" },  { data:sources, title:"Sources"}])
+        initTypeHead('#search_years', onYearSelected_tableVersion, [{ data: years, title: "Year" }])
     }
 
 });

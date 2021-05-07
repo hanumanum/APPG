@@ -106,11 +106,12 @@ function showSankeyD3(data, containerSelector, conf) {
 
 
 
-function showTableD3(data, containerSelector, conf) {
+function showTableD3(data, containerSelector) {
     $(containerSelector).empty();
+    
 
     if (!data.length) {
-        $(containerSelector).text("no data for current filters");
+        $("#nodataholder").show();
         return;
     }
 
@@ -120,8 +121,8 @@ function showTableD3(data, containerSelector, conf) {
     _data.map(function (v, i, arr) {
         const appg = $("<td>").text(v.appg)
         const source = $("<td>").text(v.source)
-        const total = $("<td>").text(v.total)
-        const appgtotal = $("<td>").text(v.appgtotal)
+        const total = $("<td>").text(" £" + d3.format(",.2r")(v.total))
+        const appgtotal = $("<td>").text(" £" + d3.format(",.2r")(v.appgtotal))
 
         const tr = $("<tr>")
 

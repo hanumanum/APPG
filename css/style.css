@@ -311,4 +311,9 @@ td {
     border-right: solid 1px gray;
 }
 
+#nodataholder{
+    text-align: center;
+    display: none;
+}
+
 /* end of Table Layout Styles */
