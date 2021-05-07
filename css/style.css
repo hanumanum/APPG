@@ -289,7 +289,7 @@ br {
     height: 20px;
 }
 
-tr {
+.rowspanedend {
     border-bottom: solid 4px maroon;
 }
 
@@ -305,7 +305,7 @@ thead tr th {
 }
 
 td {
-    padding     : 12px 10px;
+    padding     : 12px 25px;
     width       : 24.8%;
     border-left : solid 1px gray;
     border-right: solid 1px gray;
