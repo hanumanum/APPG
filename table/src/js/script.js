@@ -30,7 +30,7 @@ $(document).ready(function () {
         const sources = datarepo.getSuggestionList("source")
         const years = datarepo.getSuggestionList("date")
         //years.push("All years")
-        initTypeHead('#search_destinations', onOptionSelected_tableVersion, [{ data: mps, title: "MP" }, { data: appgs, title: "APPG" },  { data:sources, title:"Sources"}])
+        initTypeHead('#search_destinations', onOptionSelected_tableVersion, [{ data: mps, title: "Parlamentarian" }, { data: appgs, title: "APPG" },  { data:sources, title:"Sources"}])
         initTypeHead('#search_years', onYearSelected_tableVersion, [{ data: years, title: "Year" }])
     }
 
