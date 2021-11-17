@@ -130,7 +130,12 @@ input:focus {
 .tt-dataset {
     background-color: #f9fdfe;
     border          : solid 1px #dee2e8;
-    width           : 500px;
+    /* width           : 500px; */
+}
+
+.tt-menu{
+   max-height: 400px;
+    overflow-y: scroll;;
 }
 
 .tt-dataset h3 {
@@ -276,6 +281,15 @@ iframe {
     width     : auto !important;
     text-align: left !important;
     height    : auto !important;
+}
+
+#viewalllist{
+    float:right;
+    padding:5px 8px;
+    color:white;
+    background-color: maroon;
+    margin: 5px 8px;
+    text-decoration: none;
 }
 
 /* Table Layout Styles */

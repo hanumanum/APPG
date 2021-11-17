@@ -106,7 +106,7 @@ function showSankeyD3(data, containerSelector, conf) {
 
 
 
-function showTableD3(data, containerSelector) {
+function showTableD3(data, containerSelector, showyear = false) {
     $(containerSelector).empty();
     
 
@@ -116,11 +116,9 @@ function showTableD3(data, containerSelector) {
     }
 
     const _data = datarepo.formatForTable(data)
-    console.log(_data)
-
-    _data.map(function (v, i, arr) {
+     _data.map(function (v, i, arr) {
         const appg = $("<td>").text(v.appg)
-        const source = $("<td>").text(v.source)
+        const source = $("<td>").text(v.source +( (showyear)  ? " ("+v.date+")" : "") )
         const total = $("<td>").text(" £" + d3.format(",.2r")(v.total))
         const appgtotal = $("<td>").text(" £" + d3.format(",.2r")(v.appgtotal))
 

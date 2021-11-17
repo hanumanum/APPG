@@ -2,20 +2,17 @@ const dataURL = "../data/data_all.json"
 const nodeWidth = 20 
 const nodePadding = 25
 const DEBUG = true
-initMouseCoordinates()
+//initMouseCoordinates()
 let datarepo;
 
 
 $(document).ready(function () {
-    $.get(dataURL, initSankeyDiagram, "json");
+    $.get(dataURL, initTableDiagram, "json");
 
-    function initSankeyDiagram(_data) {
-        data = _data
+    function initTableDiagram(_data) {
         
-        datarepo = dataRepository(data)
+        datarepo = dataRepository(_data)
         initTypeheadSelect(datarepo.getAll())
-        //const bounds = datarepo.getValueBounds()
-        //console.log(bounds)
 
         //datarepo.addFilter("top", true)
         datarepo.addFilter("year", 2020)
