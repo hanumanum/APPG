@@ -109,10 +109,12 @@ function showSankeyD3(data, containerSelector, conf) {
 function showTableD3(data, containerSelector, showyear = false) {
     $(containerSelector).empty();
     
-
     if (!data.length) {
         $("#nodataholder").show();
         return;
+    }
+    else{
+        $("#nodataholder").hide();
     }
 
     const _data = datarepo.formatForTable(data)
@@ -121,7 +123,6 @@ function showTableD3(data, containerSelector, showyear = false) {
         const source = $("<td>").text(v.source +( (showyear)  ? " ("+v.date+")" : "") )
         const total = $("<td>").text(" £" + d3.format(",.2r")(v.total))
         const appgtotal = $("<td>").text(" £" + d3.format(",.2r")(v.appgtotal))
-
         const tr = $("<tr>")
 
         if (v.rowspanfromhere) {
@@ -129,10 +130,8 @@ function showTableD3(data, containerSelector, showyear = false) {
             $(tr).append(appg)
         }
 
-
         $(tr).append(source)
         $(tr).append(total)
-
 
         if (v.rowspanfromhere) {
             $(appgtotal).addClass("rowspanedend").attr("rowspan", v.count)
@@ -144,44 +143,5 @@ function showTableD3(data, containerSelector, showyear = false) {
         }
 
         $(containerSelector).append(tr)
-
-
     })
-
-
-
-    /*
-    const table = d3.select(containerSelector)
-    const tr = table.selectAll("tr")
-        .data(_data)
-        .enter()
-        .append('tr')
-
-    //const reduceDonors = function (a, v) { return a += "<td>" + v.source + "</td>" }
-    //const reduceDonations = function (a, v) { return a += "<td>" + v.total + "</td>" }
-    const columns = ["appg", "source", "total", "appgtotal"]
-    const cells = tr.selectAll("td")
-        .data(function (row) {
-            return columns.map(function (column, index) {
-                return { column: column, index: index, value: row[column] }
-            })
-        })
-        .enter()
-        .append('td')
-        .html(function (d) {
-            if (d.index === 0) {
-                return d.value
-            }
-            else if (d.index === 1) {
-                return d.value
-            }
-            else if (d.index === 2) {
-                return d.value
-            }
-            else if (d.index === 3) {
-                return " £" + d3.format(",.2r")(d.value)
-            }
-            
-        })
-        */
 }

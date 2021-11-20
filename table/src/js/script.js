@@ -15,7 +15,7 @@ $(document).ready(function () {
         initTypeheadSelect(datarepo.getAll())
 
         //datarepo.addFilter("top", true)
-        datarepo.addFilter("year", 2020)
+        datarepo.addFilter("year", 2021)
         const top = datarepo.getFiltered()
         //const all = datarepo.getAll()
         showTableD3(top, "#tbody")
