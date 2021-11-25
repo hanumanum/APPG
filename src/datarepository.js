@@ -89,7 +89,15 @@ function dataRepository(_data) {
     }
 
 
+    
+
     /* Utilit functions */
+    function trimAllWhiteSpacesFromArray(array){
+        return array.map(function(v){
+            return v.trim()
+        })
+    }
+
 
     function fixAPPandSource(data) {
         if (!DEBUG) {
